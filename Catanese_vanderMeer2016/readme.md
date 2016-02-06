@@ -1,6 +1,6 @@
 # Catanese et al. (submitted)
-Code used for processing, analysis and visualization in Catanese, Carmichael et
-al. (submitted)
+Code used for processing, analysis and visualization in Catanese,
+Carmichael & van der Meer (submitted)
 
 Makes extensive use of the
 [vandermeerlab codebase](https://github.com/mvdm/vandermeerlab);
@@ -14,14 +14,13 @@ You will also need the [FieldTrip toolbox](http://www.fieldtriptoolbox.org/); we
 Once you have checked out the above code, set up your MATLAB path as follows:
 
 ```
-restoredefaultpath;
+restoredefaultpath; % start with clean slate
 addpath(genpath('\GitHub\vandermeerlab\code-matlab\shared'));
-cd('\GitHub\fieldtrip');
-ft_defaults;
+cd('\GitHub\fieldtrip'); % remember to replace paths with yours
+ft_defaults; % warning can be ignored
 ```
 
 We used MATLAB R2014b running on 64-bit Windows 7.
 
 The original data sets, as well as wiki-based tutorials introducing
-the codebase architecture, along with various hands-on examples using
-real data sets, are available on request.
+the codebase architecture, are available on request.

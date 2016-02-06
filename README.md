@@ -15,3 +15,5 @@ real data sets, are available on request.
 # license
 Please see [here](https://github.com/mvdm/papers/blob/master/LICENSE)
 for licensing information.
+
+![Image from Malhotra et al. 2015](https://cloud.githubusercontent.com/assets/1922878/12867851/df576854-ccc6-11e5-9212-82411384cdc9.png)
