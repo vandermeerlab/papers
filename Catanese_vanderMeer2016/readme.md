@@ -15,10 +15,38 @@ Once you have checked out the above code, set up your MATLAB path as follows:
 
 ```
 restoredefaultpath; % start with clean slate
-addpath(genpath('\GitHub\vandermeerlab\code-matlab\shared'));
 cd('\GitHub\fieldtrip'); % remember to replace paths with yours
+addpath(genpath('\GitHub\vandermeerlab\code-matlab\shared'));
+addpath('\GitHub\papers\Catanese_vanderMeer2016\utility');
 ft_defaults; % warning can be ignored
 ```
+
+To obtain the data, e-mail mvdm at dartmouth dot edu to get access to
+the lab server. Then, to reproduce the results in the paper, run the
+following:
+
+- For the epoch-based analyses (Figure 3), run [this script]().
+- For all event-based analyses (Figures 4, 5, 6 and 9) first run the
+  [event detection](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_CollectGammaEvents.m);
+  subsequent analyses require the resulting `ALL_evt` variable to
+  exist in the workspace.
+- Amplitude correlations: [MASTER_AmplCorr.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_AmplCorr.m) followed by [PLOT_AmplCorr.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/plotting/PLOT_AmplCorr.m).
+- Phase slopes:
+  [MASTER_SpectralConnectivity.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_SpectralConnectivity.m)
+  followed by
+  [PLOT_SpectralConnectivity.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/plotting/PLOT_SpectralConnectivity.m).
+- Ensemble classification: [MASTER_ClassifyGammaEvents.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_ClassifyGammaEvents.m) followed by [PLOT_Classify.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/plotting/PLOT_Classify.m).
+- Analysis of phase lags and slopes for signal generator inputs: [MASTER_probe.m]().
+
+Other items:
+
+- Phase slope index schematic (Figure 5a):
+  [PLOT_PSIexample.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/plotting/PLOT_PSIexample.m).
+- Code for checking the units in FieldTrip's output for the
+  [phase angle](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/simulations/icoh_unit_check.m)
+  and
+  [phase slopes](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/simulations/psi_unit_check.m)
+  on simulated data. 
 
 We used MATLAB R2014b running on 64-bit Windows 7.
 
