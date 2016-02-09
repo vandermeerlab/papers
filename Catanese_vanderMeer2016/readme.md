@@ -25,7 +25,6 @@ To obtain the data, e-mail mvdm at dartmouth dot edu to get access to
 the lab server. Then, to reproduce the results in the paper, run the
 following:
 
-- For the epoch-based analyses (Figure 3), run [this script]().
 - For all event-based analyses (Figures 4, 5, 6 and 9) first run the
   [event detection](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_CollectGammaEvents.m);
   subsequent analyses require the resulting `ALL_evt` variable to
@@ -36,7 +35,9 @@ following:
   followed by
   [PLOT_SpectralConnectivity.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/plotting/PLOT_SpectralConnectivity.m).
 - Ensemble classification: [MASTER_ClassifyGammaEvents.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_ClassifyGammaEvents.m) followed by [PLOT_Classify.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/plotting/PLOT_Classify.m).
-- Analysis of phase lags and slopes for signal generator inputs: [MASTER_probe.m]().
+- Analysis of phase lags and slopes for signal generator inputs:
+  [MASTER_probe.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_probe.m).
+- For the epoch-based analyses (Figure 3), run [this script](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_meanPSD_COH_Script_JC.m).
 
 Other items:
 
