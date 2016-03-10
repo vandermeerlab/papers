@@ -1,6 +1,8 @@
-# Catanese et al. (submitted)
+# Catanese et al. (2016)
 Code used for processing, analysis and visualization in Catanese,
-Carmichael & van der Meer (submitted)
+Carmichael & van der Meer, "Low and high gamma oscillations deviate in
+opposite directions from zero-phase synchrony in the limbic
+corticostriatal loop" (2016) [Journal of Neurophysiology](http://jn.physiology.org/content/early/2016/03/04/jn.00914.2015)
 
 Makes extensive use of the
 [vandermeerlab codebase](https://github.com/mvdm/vandermeerlab);
