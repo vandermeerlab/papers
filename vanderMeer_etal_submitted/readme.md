@@ -11,29 +11,29 @@ if you want to be sure you are using the same code that generated the
 results in the paper.
 
 Once you have checked out the above code, set up your MATLAB path
-using [this script]().
+using [this script](https://github.com/mvdm/papers/blob/master/vanderMeer_etal_submitted/misc/MASTER_path.m).
 
 To obtain the data, e-mail mvdm at dartmouth dot edu to get access to
 the lab server. Then, to reproduce the results in the paper, run the
 following:
 
 - For the parameter sweep results in Figures 4 and 5, first use [this
-  script]() to generate a struct (`ALL_decErr`) containing decoding
+  script](https://github.com/mvdm/papers/blob/master/vanderMeer_etal_submitted/ParameterSweep/GENERATE_decErr_paramSweep.m) to generate a struct (`ALL_decErr`) containing decoding
   accuracy data across all sessions and parameter values for a given
   data split. Obtain and save this struct for each split you want to test.
-- Plotting the results is done [here](). Make sure that the filenames
+- Plotting the results is done [here](https://github.com/mvdm/papers/blob/master/vanderMeer_etal_submitted/ParameterSweep/PLOT_decErr_paramSweep.m). Make sure that the filenames
   specified at the top of this script match what you saved them as in
   the previous step. This same script generates Figure 8.
 - Figure 6 requires generating an output data struct for each
-  parameter combination of interest using [this script]() and then
-  plotting the results with [this]().
+  parameter combination of interest using [this script](https://github.com/mvdm/papers/blob/master/vanderMeer_etal_submitted/NumberOfTrials/GENERATE_loocv_byLap.m) and then
+  plotting the results with [this](https://github.com/mvdm/papers/blob/master/vanderMeer_etal_submitted/NumberOfTrials/PLOT_loocv_byLap_multi.m).
 - Figure 7 follows the same structure: generate the output variables
-  with [this]() and then [plot](). As above, remember to update the
+  with [this](https://github.com/mvdm/papers/blob/master/vanderMeer_etal_submitted/TrialDistance/GENERATE_singleLapDist.m) and then [plot](https://github.com/mvdm/papers/blob/master/vanderMeer_etal_submitted/TrialDistance/PLOT_singleLapDist.m). As above, remember to update the
   filenames used.
 
 Extras:
 
-- To produce the cross-validation schematic in Figure 3, run [this]().
+- To produce the cross-validation schematic in Figure 3, run [this](https://github.com/mvdm/papers/blob/master/vanderMeer_etal_submitted/misc/decSchematic.m).
 - Counting the number of units recorded (Table 1) is done by
   [this script](https://github.com/vandermeerlab/vandermeerlab/blob/44a3547f059bfeb828cb3f5aaedb74e5e644f92d/code-matlab/tasks/Alyssa_Tmaze/paper/PAPER_Collect_nUnitsRecorded.m).
 
