@@ -1,29 +1,41 @@
 # van der Meer et al. (submitted) Code used for processing, analysis
-and visualization in van der Meer, Carey, Tanaka (submitted), "Towards
-the principled decoding of internally generated sequences in the
-hippocampus"
+and visualization in van der Meer, Carey, Tanaka (submitted),
+"Optimizing for generalization in the decoding of internally generated
+activity in the hippocampus"
 
 Makes extensive use of the
 [vandermeerlab codebase](https://github.com/mvdm/vandermeerlab);
 please use
-[this commit](TBC)
+[this commit](https://github.com/vandermeerlab/vandermeerlab/commit/44a3547f059bfeb828cb3f5aaedb74e5e644f92d)
 if you want to be sure you are using the same code that generated the
 results in the paper.
 
-Once you have checked out the above code, set up your MATLAB path as follows:
-
-```
-restoredefaultpath; % start with clean slate
-addpath(genpath('\GitHub\vandermeerlab\code-matlab\shared'));
-addpath('');
-```
+Once you have checked out the above code, set up your MATLAB path
+using [this script]().
 
 To obtain the data, e-mail mvdm at dartmouth dot edu to get access to
 the lab server. Then, to reproduce the results in the paper, run the
 following:
 
-- Step 1
-- Step 2
+- For the parameter sweep results in Figures 4 and 5, first use [this
+  script]() to generate a struct (`ALL_decErr`) containing decoding
+  accuracy data across all sessions and parameter values for a given
+  data split. Obtain and save this struct for each split you want to test.
+- Plotting the results is done [here](). Make sure that the filenames
+  specified at the top of this script match what you saved them as in
+  the previous step. This same script generates Figure 8.
+- Figure 6 requires generating an output data struct for each
+  parameter combination of interest using [this script]() and then
+  plotting the results with [this]().
+- Figure 7 follows the same structure: generate the output variables
+  with [this]() and then [plot](). As above, remember to update the
+  filenames used.
+
+Extras:
+
+- To produce the cross-validation schematic in Figure 3, run [this]().
+- Counting the number of units recorded (Table 1) is done by
+  [this script](https://github.com/vandermeerlab/vandermeerlab/blob/44a3547f059bfeb828cb3f5aaedb74e5e644f92d/code-matlab/tasks/Alyssa_Tmaze/paper/PAPER_Collect_nUnitsRecorded.m).
 
 Miscellaneous:
 
