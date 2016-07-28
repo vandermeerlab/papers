@@ -1,7 +1,8 @@
-# van der Meer et al. (submitted) Code used for processing, analysis
-and visualization in van der Meer, Carey, Tanaka (submitted),
-"Optimizing for generalization in the decoding of internally generated
-activity in the hippocampus"
+# van der Meer et al. (submitted)
+
+Code used for processing, analysis and visualization in van der Meer,
+Carey, Tanaka (submitted),"Optimizing for generalization in the
+decoding of internally generated activity in the hippocampus"
 
 Makes extensive use of the
 [vandermeerlab codebase](https://github.com/mvdm/vandermeerlab);
