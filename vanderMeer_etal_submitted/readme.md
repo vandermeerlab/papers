@@ -3,9 +3,10 @@
 Code used for processing, analysis and visualization in van der Meer,
 Carey, Tanaka (submitted),"Optimizing for generalization in the
 decoding of internally generated activity in the hippocampus"
+([preprint](http://www.vandermeerlab.org/MvdM_etal_DecodingQ.pdf))
 
 Makes extensive use of the
-[vandermeerlab codebase](https://github.com/mvdm/vandermeerlab);
+[vandermeerlab codebase](https://github.com/vandermeerlab/vandermeerlab);
 please use
 [this commit](https://github.com/vandermeerlab/vandermeerlab/commit/44a3547f059bfeb828cb3f5aaedb74e5e644f92d)
 if you want to be sure you are using the same code that generated the
@@ -44,4 +45,4 @@ We used MATLAB R2014b running on 64-bit Windows 7.
 
 Wiki-based tutorials introducing the codebase architecture, and
 step-by-step explanations of specific analyses, are
-[here](http://ctnsrv.uwaterloo.ca/vandermeerlab/doku.php?id=analysis:course-w16)
+[here](http://ctnsrv.uwaterloo.ca/vandermeerlab/doku.php?id=analysis:course-w16).

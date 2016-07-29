@@ -1,11 +1,13 @@
 # Catanese et al. (2016)
+
 Code used for processing, analysis and visualization in Catanese,
 Carmichael & van der Meer, "Low and high gamma oscillations deviate in
 opposite directions from zero-phase synchrony in the limbic
-corticostriatal loop" (2016) [Journal of Neurophysiology](http://jn.physiology.org/content/early/2016/03/04/jn.00914.2015)
+corticostriatal loop" (2016)
+[Journal of Neurophysiology](http://jn.physiology.org/content/early/2016/03/04/jn.00914.2015) ([preprint](http://www.vandermeerlab.org/JC_MvdM_gamma_accepted.pdf))
 
 Makes extensive use of the
-[vandermeerlab codebase](https://github.com/mvdm/vandermeerlab);
+[vandermeerlab codebase](https://github.com/vandermeerlab/vandermeerlab);
 please use
 [this release](https://github.com/mvdm/vandermeerlab/releases/tag/v1.1)
 if you want to be sure you are using the same code that generated the
@@ -53,5 +55,6 @@ Other items:
 
 We used MATLAB R2014b running on 64-bit Windows 7.
 
-The original data sets, as well as wiki-based tutorials introducing
-the codebase architecture, are available on request.
+Wiki-based tutorials introducing the codebase architecture, and
+step-by-step explanations of specific analyses, are
+[here](http://ctnsrv.uwaterloo.ca/vandermeerlab/doku.php?id=analysis:course-w16).
