@@ -20,6 +20,8 @@ cfg_master.nSpikesHist = -0.5:105; % used to keep histogram of number of spikes 
 
 nMaxLaps = 20;
 cfg_master.encdecmat = 1-eye(nMaxLaps); % leave-one-out
+% cfg_master.encdecmat = circshift(eye(nMaxLaps),[0 1]); % next-trial
+% cfg_master.encdecmat = eye(nMaxLaps); % same-trial
 
 %% find data folders eligible for analysis
 fd_cfg = []; fd_cfg.requireCandidates = 0; % don't need previously saved sharp wave-ripple (SWR) candidates here
