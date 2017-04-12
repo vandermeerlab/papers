@@ -1,0 +1,346 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Naris_fast</title><meta name="generator" content="MATLAB 8.4"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-12-09"><meta name="DC.source" content="Naris_fast.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#3">default parameters</a></li><li><a href="#7">plot the data</a></li><li><a href="#10">save the plots. and the data.</a></li><li><a href="#12">save the plots. and the data.</a></li><li><a href="#13">save the best ones:</a></li></ul></div><pre class="codeinput"><span class="keyword">function</span> [naris] = Naris_fast(cfg)
+</pre><pre class="codeinput"><span class="comment">%Naris_Fast  Loads the data for s single set of channels (normally a</span>
+<span class="comment">%tetrode) and then pltos all four session PSDs in a 2x2 plot as well as a</span>
+<span class="comment">%overlapping PSD plot.  Will save different file extensions for different</span>
+<span class="comment">%hanning window sizes.</span>
+<span class="comment">%</span>
+<span class="comment">%Inputs:</span>
+<span class="comment">%   cfg [struct]: can be blank if you want to use the defaults.</span>
+</pre><h2>default parameters<a name="3"></a></h2><pre class="codeinput"><span class="keyword">if</span> nargin &lt;1
+    cfg = [];
+<span class="keyword">end</span>
+</pre><pre class="codeinput">cfg.file_name = mkfile;
+[cfg] = Naris_cfgs(cfg.file_name(1:4));
+<span class="keyword">if</span> strcmp(cfg.fname(1:4), <span class="string">'R053'</span>) || strcmp(cfg.fname(1:4), <span class="string">'R060'</span>)
+    cfg.Naris_exp = {<span class="string">'pre'</span>, <span class="string">'right'</span>, <span class="string">'left'</span>, <span class="string">'post'</span>};
+    tetrodes = tts(cfg);
+    cfg.tetrodes = tetrodes.channels_array(cfg.chan);
+    cfg.chan = 1;
+<span class="keyword">else</span>
+    cfg.Naris_exp = {<span class="string">'pre'</span>, <span class="string">'ipsi'</span>, <span class="string">'contra'</span>, <span class="string">'post'</span>};
+    cfg.tetrodes = [38 14 9 34];
+    cfg.chan = 4;
+    cfg.tetrodes = cfg.tetrodes(cfg.chan);
+    cfg.chan = 1;
+<span class="keyword">end</span>
+cfg.hann_win_fac = 4;
+cfg.hann_win = 1024*cfg.hann_win_fac;
+cfg.df = 10;
+cfg.whitefilter = <span class="string">'on'</span>;
+cfg.gamma= [40 55];
+cfg
+warning <span class="string">off</span>
+<span class="comment">% cfg.notch = 0;</span>
+</pre><pre class="codeoutput error">Attempt to reference field of non-structure array.
+
+Error in Naris_cfgs (line 3)
+if strcmp(cfg.fname(1:4), 'R053')
+
+Error in Naris_fast (line 15)
+[cfg] = Naris_cfgs(cfg.file_name(1:4));
+</pre><pre class="codeinput"><span class="keyword">for</span> exp = 1:4
+</pre><pre class="codeinput">    cfg.naris_type = cfg.Naris_exp{exp};
+    data = Naris_psd(cfg);
+    disp([data.hdr.Filename(20:end-4) <span class="string">' Data has been loaded'</span>])
+</pre><h2>plot the data<a name="7"></a></h2><pre class="codeinput">    cfg.sub_num = exp;
+
+    n_fig = Naris_plot(data, cfg);
+
+    naris.(cfg.Naris_exp{exp}).data = data.psd;
+    <span class="keyword">for</span> ich = 1:length(data.labels)
+        naris.(cfg.Naris_exp{exp}).labels{ich} = data.labels;
+        naris.(cfg.Naris_exp{exp}).cfg = cfg;
+    <span class="keyword">end</span>
+</pre><pre class="codeinput"><span class="keyword">end</span>
+</pre><pre class="codeinput">ah = axes(<span class="string">'position'</span>,[0,0,1,1],<span class="string">'visible'</span>,<span class="string">'off'</span>);
+line([0,1],[0.5,.5],<span class="string">'parent'</span>,ah,<span class="string">'linewidth'</span>,1.5, <span class="string">'color'</span>, <span class="string">'k'</span>);
+line([0.5,.5],[0,1],<span class="string">'parent'</span>,ah,<span class="string">'linewidth'</span>,1.5, <span class="string">'color'</span>, <span class="string">'k'</span>);
+text(.255, .98, cfg.Naris_exp{1}, <span class="string">'Parent'</span>, ah, <span class="string">'fontsize'</span>, 28);
+text(.7, .98, cfg.Naris_exp{2}, <span class="string">'Parent'</span>, ah, <span class="string">'fontsize'</span>, 28)
+text(.255, .025, cfg.Naris_exp{3}, <span class="string">'Parent'</span>, ah, <span class="string">'fontsize'</span>, 28)
+text(.705, .025, cfg.Naris_exp{4}, <span class="string">'Parent'</span>, ah, <span class="string">'fontsize'</span>, 28)
+<span class="comment">% if isfield(data.hdr, 'filter') &amp;&amp; strcmp(data.hdr.filter, 'notch')</span>
+<span class="comment">%     text(.05, .98, [cfg.fname 'w/notch'], 'Parent', ah, 'fontsize', 18)</span>
+<span class="comment">% else</span>
+text(.05, .98, cfg.fname, <span class="string">'Parent'</span>, ah, <span class="string">'fontsize'</span>, 18)
+<span class="comment">% end</span>
+</pre><h2>save the plots. and the data.<a name="10"></a></h2><pre class="codeinput"><span class="keyword">if</span> isfield(cfg, <span class="string">'whitefilter'</span>);
+    save([<span class="string">'White_Naris_data_'</span> num2str(cfg.hann_win_fac)], <span class="string">'naris'</span>, <span class="string">'-v7.3'</span>)
+<span class="keyword">else</span>
+    save([<span class="string">'Naris_data_'</span> num2str(cfg.hann_win_fac)], <span class="string">'naris'</span>, <span class="string">'-v7.3'</span>)
+<span class="keyword">end</span>
+<span class="comment">%save data.</span>
+
+<span class="keyword">if</span> isfield(cfg, <span class="string">'whitefilter'</span>); cfg.fname = [cfg.fname <span class="string">'_white'</span>]; <span class="keyword">end</span>
+
+mkdir([cd <span class="string">'\'</span> date])
+saveas(gcf, [cd <span class="string">'\'</span> date <span class="string">'\Naris_'</span> num2str(cfg.hann_win_fac) <span class="string">'_'</span> cfg.fname <span class="string">'.fig'</span>])
+print(gcf, <span class="string">'-dpng'</span>,<span class="string">'-r300'</span>,[cd <span class="string">'\'</span> date <span class="string">'\Naris_'</span> num2str(cfg.hann_win_fac) <span class="string">'_'</span> cfg.fname <span class="string">'.png'</span>])
+
+<span class="comment">% save it in the all Naris Folder</span>
+mkdir([<span class="string">'G:\Naris\figures\'</span>  date])
+saveas(gcf, [<span class="string">'G:\Naris\figures\'</span>  date <span class="string">'\Naris_'</span> cfg.fname <span class="string">'.fig'</span>])
+print(gcf, <span class="string">'-dpng'</span>,<span class="string">'-r300'</span>,[<span class="string">'G:\Naris\figures\'</span>  date <span class="string">'\Naris_'</span> num2str(cfg.hann_win_fac) <span class="string">'_'</span> cfg.fname <span class="string">'.png'</span>])
+
+<span class="comment">% save it in the all Naris Folder in the dropbox as well.</span>
+mkdir([<span class="string">'C:\Users\mvdmlab\Dropbox\Reading list\Naris\'</span>  date])
+saveas(gcf, [<span class="string">'C:\Users\mvdmlab\Dropbox\Reading list\Naris\'</span>  date <span class="string">'\Naris_'</span> cfg.fname <span class="string">'.fig'</span>])
+print(gcf, <span class="string">'-dpng'</span>,<span class="string">'-r300'</span>,[<span class="string">'C:\Users\mvdmlab\Dropbox\Reading list\Naris\'</span>  date <span class="string">'\Naris_'</span> num2str(cfg.hann_win_fac) <span class="string">'_'</span> cfg.fname <span class="string">'.png'</span>])
+</pre><pre class="codeinput">figHandles = get(0,<span class="string">'Children'</span>);
+<span class="keyword">if</span> isempty(figHandles) ==0 &amp;&amp; sum(figHandles == 20) &gt; 0
+    close(20)
+<span class="keyword">end</span>
+F = figure(20);
+hold <span class="string">on</span>
+set(gcf, <span class="string">'PaperPositionMode'</span>, <span class="string">'auto'</span>, <span class="string">'color'</span>, <span class="string">'w'</span>)
+set(F, <span class="string">'Position'</span>, [200, 200, 900 700])
+
+<span class="comment">% text(cfg.gamma(1)+3, -18, 'Gamma', 'Fontsize', 14)</span>
+
+<span class="comment">% maximize</span>
+c_ord = linspecer(4);
+<span class="keyword">for</span> exp = 1:4
+    <span class="keyword">for</span> iCh = cfg.chan
+        psd_norm = 10*log10(naris.(cfg.Naris_exp{exp}).data{iCh}.Data);
+        plot(naris.(cfg.Naris_exp{exp}).data{iCh}.Frequencies,psd_norm,<span class="string">'color'</span>,c_ord(exp,:),<span class="string">'LineWidth'</span>,4);
+        set(gca,<span class="string">'XLim'</span>,[0 100],<span class="string">'XTick'</span>,0:10:100,<span class="string">'YLim'</span>,[-20 10],<span class="string">'XTickLabel'</span>,{0 10 20 30 40 50 60 70 80 90 100},<span class="string">'YTick'</span>,[0 30]); grid <span class="string">on</span>;
+<span class="comment">%         vline([45 60 75 85], {'g','g','b', 'b'}, {'Gamma50', ' ', 'Gamma80', ' '})</span>
+        text(1, 45, num2str(data.labels(iCh)), <span class="string">'fontsize'</span>, 16)
+    <span class="keyword">end</span>
+<span class="keyword">end</span>
+y_lim = get(gca, <span class="string">'ylim'</span>);
+y_lim = y_lim(1)+0.01;
+rectangle(<span class="string">'position'</span>, [cfg.gamma(1), y_lim, (cfg.gamma(2)-cfg.gamma(1)), 1.4], <span class="string">'FaceColor'</span>,[0.8 0.8 0.8], <span class="string">'edgecolor'</span>, [1 1 1])
+<span class="comment">% legend(cfg.Naris_exp)</span>
+xlabel(<span class="string">'Frequency (Hz)'</span>, <span class="string">'fontsize'</span>, 16)<span class="comment">%, 'fontweight', 'bold');</span>
+ylabel(<span class="string">'Power'</span>, <span class="string">'fontsize'</span>, 16)<span class="comment">%, 'fontweight', 'bold')</span>
+box <span class="string">on</span>
+</pre><h2>save the plots. and the data.<a name="12"></a></h2><pre class="codeinput"><span class="comment">%save data.</span>
+mkdir([cd <span class="string">'\'</span> date])
+saveas(F, [cd <span class="string">'\'</span> date <span class="string">'\Naris_'</span> num2str(cfg.hann_win_fac) <span class="string">'_'</span> cfg.fname <span class="string">'_comp.fig'</span>])
+print(F, <span class="string">'-dpng'</span>,<span class="string">'-r300'</span>,[cd <span class="string">'\'</span> date <span class="string">'\Naris_'</span> num2str(cfg.hann_win_fac) <span class="string">'_'</span> cfg.fname <span class="string">'_comp.png'</span>])
+
+<span class="comment">% save it in the all Naris Folder</span>
+mkdir([<span class="string">'G:\Naris\figures\'</span>  date])
+saveas(F, [<span class="string">'G:\Naris\figures\'</span>  date <span class="string">'\Naris_'</span> cfg.fname <span class="string">'_comp.fig'</span>])
+print(F, <span class="string">'-dpng'</span>,<span class="string">'-r300'</span>,[<span class="string">'G:\Naris\figures\'</span>  date <span class="string">'\Naris_'</span> num2str(cfg.hann_win_fac) <span class="string">'_'</span> cfg.fname <span class="string">'_comp.png'</span>])
+
+<span class="comment">% save it in the all Naris Folder in the dropbox as well.</span>
+mkdir([<span class="string">'C:\Users\mvdmlab\Dropbox\Reading list\Naris\'</span>  date])
+saveas(F, [<span class="string">'C:\Users\mvdmlab\Dropbox\Reading list\Naris\'</span>  date <span class="string">'\Naris_'</span> cfg.fname <span class="string">'_comp.fig'</span>])
+print(F, <span class="string">'-dpng'</span>,<span class="string">'-r300'</span>,[<span class="string">'C:\Users\mvdmlab\Dropbox\Reading list\Naris\'</span>  date <span class="string">'\Naris_'</span> num2str(cfg.hann_win_fac) <span class="string">'_'</span> cfg.fname <span class="string">'_comp.png'</span>])
+</pre><h2>save the best ones:<a name="13"></a></h2><pre class="codeinput">saveas(F, [<span class="string">'G:\Naris\paper_figs\'</span> <span class="string">'Naris_'</span> cfg.fname <span class="string">'_comp.fig'</span>])
+print(F, <span class="string">'-dpng'</span>,<span class="string">'-r300'</span>,[<span class="string">'G:\Naris\paper_figs\Naris_'</span> num2str(cfg.hann_win_fac) <span class="string">'_'</span> cfg.fname <span class="string">'_comp.png'</span>])
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2014b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+function [naris] = Naris_fast(cfg)
+%Naris_Fast  Loads the data for s single set of channels (normally a
+%tetrode) and then pltos all four session PSDs in a 2x2 plot as well as a
+%overlapping PSD plot.  Will save different file extensions for different
+%hanning window sizes.
+%
+%Inputs:
+%   cfg [struct]: can be blank if you want to use the defaults.
+%% default parameters
+if nargin <1
+    cfg = [];
+end
+%%
+cfg.file_name = mkfile;
+[cfg] = Naris_cfgs(cfg.file_name(1:4));
+if strcmp(cfg.fname(1:4), 'R053') || strcmp(cfg.fname(1:4), 'R060')
+    cfg.Naris_exp = {'pre', 'right', 'left', 'post'};
+    tetrodes = tts(cfg);
+    cfg.tetrodes = tetrodes.channels_array(cfg.chan);
+    cfg.chan = 1;
+else
+    cfg.Naris_exp = {'pre', 'ipsi', 'contra', 'post'};
+    cfg.tetrodes = [38 14 9 34];
+    cfg.chan = 4;
+    cfg.tetrodes = cfg.tetrodes(cfg.chan);
+    cfg.chan = 1;
+end
+cfg.hann_win_fac = 4;
+cfg.hann_win = 1024*cfg.hann_win_fac;
+cfg.df = 10;
+cfg.whitefilter = 'on';
+cfg.gamma= [40 55];
+cfg
+warning off
+% cfg.notch = 0;
+%%
+for exp = 1:4
+    cfg.naris_type = cfg.Naris_exp{exp};
+    data = Naris_psd(cfg);
+    disp([data.hdr.Filename(20:end-4) ' Data has been loaded'])
+    %% plot the data
+    cfg.sub_num = exp;
+    
+    n_fig = Naris_plot(data, cfg);
+    
+    naris.(cfg.Naris_exp{exp}).data = data.psd;
+    for ich = 1:length(data.labels)
+        naris.(cfg.Naris_exp{exp}).labels{ich} = data.labels;
+        naris.(cfg.Naris_exp{exp}).cfg = cfg;
+    end
+end
+
+%%
+ah = axes('position',[0,0,1,1],'visible','off');
+line([0,1],[0.5,.5],'parent',ah,'linewidth',1.5, 'color', 'k');
+line([0.5,.5],[0,1],'parent',ah,'linewidth',1.5, 'color', 'k');
+text(.255, .98, cfg.Naris_exp{1}, 'Parent', ah, 'fontsize', 28);
+text(.7, .98, cfg.Naris_exp{2}, 'Parent', ah, 'fontsize', 28)
+text(.255, .025, cfg.Naris_exp{3}, 'Parent', ah, 'fontsize', 28)
+text(.705, .025, cfg.Naris_exp{4}, 'Parent', ah, 'fontsize', 28)
+% if isfield(data.hdr, 'filter') && strcmp(data.hdr.filter, 'notch')
+%     text(.05, .98, [cfg.fname 'w/notch'], 'Parent', ah, 'fontsize', 18)
+% else
+text(.05, .98, cfg.fname, 'Parent', ah, 'fontsize', 18)
+% end
+%% save the plots. and the data.
+if isfield(cfg, 'whitefilter');
+    save(['White_Naris_data_' num2str(cfg.hann_win_fac)], 'naris', '-v7.3')
+else
+    save(['Naris_data_' num2str(cfg.hann_win_fac)], 'naris', '-v7.3')
+end
+%save data.
+
+if isfield(cfg, 'whitefilter'); cfg.fname = [cfg.fname '_white']; end
+
+mkdir([cd '\' date])
+saveas(gcf, [cd '\' date '\Naris_' num2str(cfg.hann_win_fac) '_' cfg.fname '.fig'])
+print(gcf, '-dpng','-r300',[cd '\' date '\Naris_' num2str(cfg.hann_win_fac) '_' cfg.fname '.png'])
+
+% save it in the all Naris Folder
+mkdir(['G:\Naris\figures\'  date])
+saveas(gcf, ['G:\Naris\figures\'  date '\Naris_' cfg.fname '.fig'])
+print(gcf, '-dpng','-r300',['G:\Naris\figures\'  date '\Naris_' num2str(cfg.hann_win_fac) '_' cfg.fname '.png'])
+
+% save it in the all Naris Folder in the dropbox as well.
+mkdir(['C:\Users\mvdmlab\Dropbox\Reading list\Naris\'  date])
+saveas(gcf, ['C:\Users\mvdmlab\Dropbox\Reading list\Naris\'  date '\Naris_' cfg.fname '.fig'])
+print(gcf, '-dpng','-r300',['C:\Users\mvdmlab\Dropbox\Reading list\Naris\'  date '\Naris_' num2str(cfg.hann_win_fac) '_' cfg.fname '.png'])
+%%
+figHandles = get(0,'Children');
+if isempty(figHandles) ==0 && sum(figHandles == 20) > 0
+    close(20)
+end
+F = figure(20);
+hold on
+set(gcf, 'PaperPositionMode', 'auto', 'color', 'w')
+set(F, 'Position', [200, 200, 900 700])
+
+% text(cfg.gamma(1)+3, -18, 'Gamma', 'Fontsize', 14)
+
+% maximize
+c_ord = linspecer(4);
+for exp = 1:4
+    for iCh = cfg.chan
+        psd_norm = 10*log10(naris.(cfg.Naris_exp{exp}).data{iCh}.Data);
+        plot(naris.(cfg.Naris_exp{exp}).data{iCh}.Frequencies,psd_norm,'color',c_ord(exp,:),'LineWidth',4);
+        set(gca,'XLim',[0 100],'XTick',0:10:100,'YLim',[-20 10],'XTickLabel',{0 10 20 30 40 50 60 70 80 90 100},'YTick',[0 30]); grid on;
+%         vline([45 60 75 85], {'g','g','b', 'b'}, {'Gamma50', ' ', 'Gamma80', ' '})
+        text(1, 45, num2str(data.labels(iCh)), 'fontsize', 16)
+    end
+end
+y_lim = get(gca, 'ylim'); 
+y_lim = y_lim(1)+0.01;
+rectangle('position', [cfg.gamma(1), y_lim, (cfg.gamma(2)-cfg.gamma(1)), 1.4], 'FaceColor',[0.8 0.8 0.8], 'edgecolor', [1 1 1])
+% legend(cfg.Naris_exp)
+xlabel('Frequency (Hz)', 'fontsize', 16)%, 'fontweight', 'bold');
+ylabel('Power', 'fontsize', 16)%, 'fontweight', 'bold')
+box on
+%% save the plots. and the data.
+%save data.
+mkdir([cd '\' date])
+saveas(F, [cd '\' date '\Naris_' num2str(cfg.hann_win_fac) '_' cfg.fname '_comp.fig'])
+print(F, '-dpng','-r300',[cd '\' date '\Naris_' num2str(cfg.hann_win_fac) '_' cfg.fname '_comp.png'])
+
+% save it in the all Naris Folder
+mkdir(['G:\Naris\figures\'  date])
+saveas(F, ['G:\Naris\figures\'  date '\Naris_' cfg.fname '_comp.fig'])
+print(F, '-dpng','-r300',['G:\Naris\figures\'  date '\Naris_' num2str(cfg.hann_win_fac) '_' cfg.fname '_comp.png'])
+
+% save it in the all Naris Folder in the dropbox as well.
+mkdir(['C:\Users\mvdmlab\Dropbox\Reading list\Naris\'  date])
+saveas(F, ['C:\Users\mvdmlab\Dropbox\Reading list\Naris\'  date '\Naris_' cfg.fname '_comp.fig'])
+print(F, '-dpng','-r300',['C:\Users\mvdmlab\Dropbox\Reading list\Naris\'  date '\Naris_' num2str(cfg.hann_win_fac) '_' cfg.fname '_comp.png'])
+
+%% save the best ones:
+
+saveas(F, ['G:\Naris\paper_figs\' 'Naris_' cfg.fname '_comp.fig'])
+print(F, '-dpng','-r300',['G:\Naris\paper_figs\Naris_' num2str(cfg.hann_win_fac) '_' cfg.fname '_comp.png'])
+    
+    
+    
+##### SOURCE END #####
+--></body></html>
