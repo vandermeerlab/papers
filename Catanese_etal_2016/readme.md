@@ -30,18 +30,18 @@ the lab server. Then, to reproduce the results in the paper, run the
 following:
 
 - For all event-based analyses (Figures 4, 5, 6 and 9) first run the
-  [event detection](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_CollectGammaEvents.m);
+  [event detection](https://github.com/mvdm/papers/blob/master/Catanese_etal2016/master/MASTER_CollectGammaEvents.m);
   subsequent analyses require the resulting `ALL_evt` variable to
   exist in the workspace.
-- Amplitude correlations: [MASTER_AmplCorr.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_AmplCorr.m) followed by [PLOT_AmplCorr.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/plotting/PLOT_AmplCorr.m).
+- Amplitude correlations: [MASTER_AmplCorr.m](https://github.com/mvdm/papers/blob/master/Catanese_etal2016/master/MASTER_AmplCorr.m) followed by [PLOT_AmplCorr.m](https://github.com/mvdm/papers/blob/master/Catanese_etal2016/plotting/PLOT_AmplCorr.m).
 - Phase slopes:
-  [MASTER_SpectralConnectivity.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_SpectralConnectivity.m)
+  [MASTER_SpectralConnectivity.m](https://github.com/mvdm/papers/blob/master/Catanese_etal2016/master/MASTER_SpectralConnectivity.m)
   followed by
-  [PLOT_SpectralConnectivity.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/plotting/PLOT_SpectralConnectivity.m).
-- Ensemble classification: [MASTER_ClassifyGammaEvents.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_ClassifyGammaEvents.m) followed by [PLOT_Classify.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/plotting/PLOT_Classify.m).
+  [PLOT_SpectralConnectivity.m](https://github.com/mvdm/papers/blob/master/Catanese_etal2016/plotting/PLOT_SpectralConnectivity.m).
+- Ensemble classification: [MASTER_ClassifyGammaEvents.m](https://github.com/mvdm/papers/blob/master/Catanese_etal2016/master/MASTER_ClassifyGammaEvents.m) followed by [PLOT_Classify.m](https://github.com/mvdm/papers/blob/master/Catanese_etal2016/plotting/PLOT_Classify.m).
 - Analysis of phase lags and slopes for signal generator inputs:
-  [MASTER_probe.m](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_probe.m).
-- For the epoch-based analyses (Figure 3), run [this script](https://github.com/mvdm/papers/blob/master/Catanese_vanderMeer2016/master/MASTER_meanPSD_COH_Script_JC.m).
+  [MASTER_probe.m](https://github.com/mvdm/papers/blob/master/Catanese_etal2016/master/MASTER_probe.m).
+- For the epoch-based analyses (Figure 3), run [this script](https://github.com/mvdm/papers/blob/master/Catanese_etal2016/master/MASTER_meanPSD_COH_Script_JC.m).
 
 Other items:
 
