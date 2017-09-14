@@ -1,8 +1,9 @@
-Carmichael et al. (submitted)
+Carmichael et al. (2017)
 
 Code used for processing, analysis and visualization in Carmichael,
-Gmaz, van der Meer (submitted),"Gamma oscillations in the rat ventral
-striatum originate in the piriform cortex" ([preprint](http://www.biorxiv.org/content/early/2017/04/12/127126)).
+Gmaz, van der Meer (2017) "Gamma oscillations in the rat ventral
+striatum originate in the piriform cortex", _Journal of Neuroscience_
+([link](http://www.biorxiv.org/content/early/2017/04/12/127126)).
 
 Makes extensive use of the
 [vandermeerlab codebase](https://github.com/vandermeerlab/vandermeerlab/);
@@ -16,15 +17,15 @@ the lab server. Then, to reproduce the results in the paper, run the
 following:
 
 LFP mapping: To load the data and generate intermediate files
-(all_data_pre, all_data_post, all_data_task) run
-[AMPX_LFP_MASTER.m](https://github.com/vandermeerlab/papers/blob/master/Carmichael_etal_submitted/Naris_Paper/Naris/AMPX_LFP_MASTER.m),
+(all\_data\_pre, all\_data\_post, all\_data\_task) run
+[AMPX_LFP_MASTER.m](https://github.com/vandermeerlab/papers/blob/master/Carmichael_etal_2017/Naris_Paper/Naris/AMPX_LFP_MASTER.m),
 one cell at a time. Then, to generate Figures 1-6, run
-[AMPX_figures_MASTER.m](https://github.com/vandermeerlab/papers/blob/master/Carmichael_etal_submitted/Naris_Paper/Naris/AMPX_figures_MASTER.m);
+[AMPX_figures_MASTER.m](https://github.com/vandermeerlab/papers/blob/master/Carmichael_etal_2017/Naris_Paper/Naris/AMPX_figures_MASTER.m);
 this requires the intermediate files generated in the previous step.
 
 Naris occlusion: To load data, generate Figure 7, and get statistics
 run
-[Naris_master.m](https://github.com/vandermeerlab/papers/blob/master/Carmichael_etal_submitted/Naris_Paper/Naris/Naris_MASTER.m). This
+[Naris_master.m](https://github.com/vandermeerlab/papers/blob/master/Carmichael_etal_2017/Naris_Paper/Naris/Naris_MASTER.m). This
 can be done independently from the LFP mapping workflow.
 
 Toolboxes used in this analysis:
