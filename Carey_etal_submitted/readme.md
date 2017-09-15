@@ -23,7 +23,9 @@ To obtain the data, e-mail mvdm at dartmouth dot edu to get access to
 the lab server, or get them from [datalad](http://datasets.datalad.org/?dir=/workshops/mind-2017/MotivationalT). Then, to reproduce the
 results in the paper, run the following:
 
-- For behavior (Figure 1), run [PAPER_Collect_Behavior.m]().
+- For analysis of behavior (Figure 1), run [Behavior_GenData.m]()
+  followed by [Behavior_MultiPlotData.m]() (for making the figure) and
+  [BehavChi.m]() (for generating the stats).
 - For the main decoded sequence analysis (Figure 2e, Figure 3a-b,
   supplementary figures), first generate SWR candidate events using
   [MASTER_Generate_Tmaze_Candidates.m](). For the results in the main
@@ -34,7 +36,7 @@ results in the paper, run the following:
   gen.MUAmethod = 'none';
   gen.ThetaThreshold = [];
   ```
-  (remember to select a different suffix, such as `suffix =
+  (remember to specify a different suffix, such as `suffix =
   '_HT1-3_noTheta';` to distinguish the resulting candidate files.)
 - Then, decode each session using [ALL_GenerateDecSeq.m]().
 - Collect data across sessions with [ALL_Collect_DecSeq.m](), and
