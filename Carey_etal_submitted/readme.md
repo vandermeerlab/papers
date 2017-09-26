@@ -33,8 +33,14 @@ to reproduce the results in the paper, run the following:
   [MASTER_Generate_Tmaze_Candidates.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/MASTER_Generate_Tmaze_Candidates.m). For
   the results in the main text, use the `amSWR` detector
   (default). For the results in Figure S4, use the following settings:
-  ``` gen.SWRmethod = 'HT'; gen.MUAmethod = 'none'; gen.ThetaThreshold
-  = []; ``` (remember to specify a different suffix, such as `suffix =
+
+```
+gen.SWRmethod = 'HT';
+gen.MUAmethod = 'none';
+gen.ThetaThreshold = [];
+```
+
+(remember to specify a different suffix, such as `suffix =
   '_HT1-3_noTheta';` to distinguish the resulting candidate files.)
 - Then, decode each session using [ALL_GenerateDecSeq.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/decoding/ALL_Generate_DecSeq.m).
 - Collect data across sessions with [ALL_Collect_DecSeq.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/decoding/ALL_Collect_DecSeq.m), and
