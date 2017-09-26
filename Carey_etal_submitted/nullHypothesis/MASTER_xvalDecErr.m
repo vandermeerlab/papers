@@ -53,6 +53,9 @@ bar(x(3:4),[1-nanmean(wlp) 1-nanmean(wrp)],'FaceColor',[0 0 1],'EdgeColor','none
 set(gca,'XLim',xl,'XTick',x,'XTickLabel',{'L','R','L','R'},'LineWidth',1,'FontSize',fs,'YTick',0:0.5:1,'YLim',[0 1]); box off;
 ylabel('SWR content null (p)');
 
+biasfun = @(d) (d(1)-d(2))-(d(3)-d(4)); % computes bias measure as (food_left-food_right)-(water_left-water_right) sequence content proportions
+title(sprintf('%.2f',biasfun([1-nanmean(flp) 1-nanmean(frp) 1-nanmean(wlp) 1-nanmean(wrp)])));
+
 
 %% xport
 cfg.output_fn = 'xval_decAcc';
