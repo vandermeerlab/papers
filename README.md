@@ -1,16 +1,16 @@
-# papers
-Code used to generate results in vandermeerlab papers
+# code used in vandermeerlab publications
+
+Each paper has its own subfolder with an associated README file.
 
 Makes extensive use of the
-[vandermeerlab codebase](https://github.com/mvdm/vandermeerlab); this
-codebase contains
-[releases](https://github.com/mvdm/vandermeerlab/releases) associated
-with each paper (subfolder) provided here. Please make sure to check
-out the correct release!
+[vandermeerlab codebase](https://github.com/mvdm/vandermeerlab).
 
-The original data sets, as well as wiki-based tutorials introducing
-the codebase architecture, along with various hands-on examples using
-real data sets, are available on request.
+Wiki-based tutorials introducing the data formats including
+annotations and metadata, the codebase architecture, and commonly used
+analyses can be found
+[here](http://ctnsrv.uwaterloo.ca/vandermeerlab/doku.php?id=analysis:course-w16). Several
+publications have publicly available data sets associated with them;
+see the README files for details.
 
 # license
 Please see [here](https://github.com/mvdm/papers/blob/master/LICENSE)

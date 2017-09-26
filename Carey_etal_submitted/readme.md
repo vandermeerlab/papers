@@ -65,8 +65,8 @@ are
 [here](http://ctnsrv.uwaterloo.ca/vandermeerlab/doku.php?id=analysis:course-w16). We
 also have a [Jupyter notebook](http://nbviewer.jupyter.org/github/summer-mind/mind_2017/blob/master/Tutorials/SpikeDecoding/spike_decoding_matlab.ipynb) with example analyses using this data set.
 
-The data set is the same as that described in van der Meer, Tanaka and
-Carey (2017) Optimizing for generalization in the decoding of
+The data set is the same as that described in van der Meer, Carey and
+Tanaka (2017) Optimizing for generalization in the decoding of
 internally generated activity in the hippocampus, _Hippocampus_
 27(5):580-595
 ([link](http://onlinelibrary.wiley.com/doi/10.1002/hipo.22714/full)).

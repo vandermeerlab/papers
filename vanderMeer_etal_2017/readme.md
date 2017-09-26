@@ -1,9 +1,10 @@
-# van der Meer et al. (submitted)
+# van der Meer et al. (2017)
 
 Code used for processing, analysis and visualization in van der Meer,
-Carey, Tanaka (submitted),"Optimizing for generalization in the
-decoding of internally generated activity in the hippocampus"
-([preprint](http://www.vandermeerlab.org/MvdM_etal_DecodingQ.pdf))
+Carey, Tanaka (2017) "Optimizing for generalization in the decoding of
+internally generated activity in the hippocampus", _Hippocampus_
+27(5):580-595
+([link](http://onlinelibrary.wiley.com/doi/10.1002/hipo.22714/full)).
 
 Makes extensive use of the
 [vandermeerlab codebase](https://github.com/vandermeerlab/vandermeerlab);
@@ -16,8 +17,9 @@ Once you have checked out the above code, set up your MATLAB path
 using [this script](https://github.com/mvdm/papers/blob/master/vanderMeer_etal_submitted/misc/MASTER_path.m).
 
 To obtain the data, e-mail mvdm at dartmouth dot edu to get access to
-the lab server. Then, to reproduce the results in the paper, run the
-following:
+the lab server, or get them from
+[DataLad](http://datasets.datalad.org/?dir=/workshops/mind-2017/MotivationalT). Then,
+to reproduce the results in the paper, run the following:
 
 - For the parameter sweep results in Figures 4 and 5, first use [this
   script](https://github.com/mvdm/papers/blob/master/vanderMeer_etal_submitted/ParameterSweep/GENERATE_decErr_paramSweep.m) to generate a struct (`ALL_decErr`) containing decoding
@@ -45,4 +47,7 @@ We used MATLAB R2014b running on 64-bit Windows 7.
 
 Wiki-based tutorials introducing the codebase architecture, and
 step-by-step explanations of specific analyses, are
-[here](http://ctnsrv.uwaterloo.ca/vandermeerlab/doku.php?id=analysis:course-w16).
+[here](http://ctnsrv.uwaterloo.ca/vandermeerlab/doku.php?id=analysis:course-w16). We
+also have a
+[Jupyter notebook](http://nbviewer.jupyter.org/github/summer-mind/mind_2017/blob/master/Tutorials/SpikeDecoding/spike_decoding_matlab.ipynb)
+with example analyses using this data set.
