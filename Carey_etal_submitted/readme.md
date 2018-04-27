@@ -2,8 +2,7 @@
 
 Code used for processing, analysis and visualization in Carey, Tanaka
 and van der Meer, "Reward revaluation biases hippocampal sequence
-content away from the preferred outcome" (submitted, e-mail mvdm at
-dartmouth dot edu for a preprint)
+content away from the preferred outcome" (submitted)
 
 Makes extensive use of the
 [vandermeerlab codebase](https://github.com/vandermeerlab/vandermeerlab);
@@ -18,6 +17,7 @@ Once you have checked out the above code, set up your MATLAB path as follows:
 restoredefaultpath; % start with clean slate
 addpath(genpath('\GitHub\vandermeerlab\code-matlab\shared'));
 addpath(genpath('\GitHub\vandermeerlab\code-matlab\tasks\Alyssa_Tmaze'));
+addpath(genpath('\GitHub\papers\Carey_etal_submitted'));
 ```
 
 To obtain the data, e-mail mvdm at dartmouth dot edu to get access to
@@ -25,12 +25,10 @@ the lab server, or get them from
 [datalad](http://datasets.datalad.org/?dir=/workshops/mind-2017/MotivationalT). Then,
 to reproduce the results in the paper, run the following:
 
-- For analysis of behavior (Figure 1), run [Behavior_GenData.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/behavior/Behavior_GenData.m)
+- For analysis of **behavior** (Figure 1), run [Behavior_GenData.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/behavior/Behavior_GenData.m)
   followed by [Behavior_MultiPlotData.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/behavior/Behavior_MultiPlotData.m) (for making the figure) and
   [BehavChi.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/behavior/BehavChi.m) (for generating the stats).
-- For the main decoded sequence analysis (Figure 2e, Figure 3a-b,
-  supplementary figures), first generate SWR candidate events using
-  [MASTER_Generate_Tmaze_Candidates.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/MASTER_Generate_Tmaze_Candidates.m). For
+- For the main **left vs. right decoding log odds analysis** (Figures XX), first generate SWR candidate events using [MASTER_Generate_Tmaze_Candidates.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/MASTER_Generate_Tmaze_Candidates.m). For
   the results in the main text, use the `amSWR` detector
   (default). For the results in Figure S4, use the following settings:
 
@@ -42,6 +40,11 @@ gen.ThetaThreshold = [];
 
 (remember to specify a different suffix, such as `suffix =
   '_HT1-3_noTheta';` to distinguish the resulting candidate files.)
+- Then, run [ALL_Generate_DecSeqCombined.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/decoding_noSeq/ALL_Generate_DecSeqCombined.m), which is a batch script to generate decoding data for each session.
+- Once that finishes, [PLOT_DecSeqCombined.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/decoding_noSeq/PLOT_DecSeqCombined.m) will output the statistics and figures.
+- For the main **decoded sequence analysis** (Figure 2e, Figure 3a-b,
+  supplementary figures), generate SWR candidate events using
+  [MASTER_Generate_Tmaze_Candidates.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/MASTER_Generate_Tmaze_Candidates.m) if you haven't already done so.
 - Then, decode each session using [ALL_GenerateDecSeq.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/decoding/ALL_Generate_DecSeq.m).
 - Collect data across sessions with [ALL_Collect_DecSeq.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/decoding/ALL_Collect_DecSeq.m), and
   generate the figures with [ALL_Plot_DecSeq.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/decoding/ALL_Plot_DecSeq.m). For these last two
