@@ -29,8 +29,8 @@ cfg = ProcessConfig(cfg_def,cfg_in);
 
 biasfun = @(d) (d(1)-d(2))-(d(3)-d(4)); % computes bias measure as (food_left-food_right)-(water_left-water_right) sequence content proportions
 
-what = {'pre','task','post'};
-%what = {'all'};
+%what = {'pre','task','post'};
+what = {'all'};
 what_idx = {[1 2 7 8],[3 4 9 10],[5 6 11 12]};
 
 % first plot data for all rats
