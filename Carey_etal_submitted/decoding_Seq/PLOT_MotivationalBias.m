@@ -1,5 +1,5 @@
-function fh = PLOT_MotivationalBias_NoSequences(cfg_in,data)
-% function fh = PLOT_Motivational_NoSequences(cfg_in,data)
+function fh = PLOT_MotivationalBias(cfg_in,data)
+% function fh = PLOT_MotivationalBias(cfg_in,data)
 %
 % plots SWR content averaged over sessions
 % (MotivationalT data set)
@@ -9,7 +9,7 @@ function fh = PLOT_MotivationalBias_NoSequences(cfg_in,data)
 % cfg_in: options that control display properties
 %
 % data: struct with .all, .pre, .task, .post fields containing data output
-% by ALL_PlotDecSeqCombined2.m
+% by ALL_CollectDecSeq.m, see ALL_Plot_DecSeq for an example of how to load
 % these
 %
 % OUTPUTS:
@@ -17,54 +17,52 @@ function fh = PLOT_MotivationalBias_NoSequences(cfg_in,data)
 
 cfg_def = [];
 cfg_def.showAllRatsText = 0;
-cfg_def.colormode = 'inventory3';
-cfg_def.colors = TmazeColors(cfg_def.colormode);
-cfg_def.fs = 18; % font size
-cfg_def.ylim = [1 2];
-cfg_def.ylimtick = [0.5 0.5];
-cfg_def.writeOutput = 0;
-cfg_def.output_fn = 'temp';
 
 cfg = ProcessConfig(cfg_def,cfg_in);
 
-biasfun = @(d) (d(1)-d(2)); % computes bias measure as (food-water)
+biasfun = @(d) (d(1)-d(2))-(d(3)-d(4)); % computes bias measure as (food_left-food_right)-(water_left-water_right) sequence content proportions
 
-%what = {'pre','task','post'};
-what = {'all'};
+what = {'pre','task','post'};
 what_idx = {[1 2 7 8],[3 4 9 10],[5 6 11 12]};
 
 % first plot data for all rats
 rats = {'all'}; iRat = 1;
-col = {cfg.colors.(rats{iRat}).f cfg.colors.(rats{iRat}).w}; % {foodColor waterColor}
+col = {cfg.colors.(rats{iRat}).f cfg.colors.(rats{iRat}).f cfg.colors.(rats{iRat}).w cfg.colors.(rats{iRat}).w}; % {foodColor foodColor waterColor waterColor}
 
-ylab = {'log odds p(left)/p(right) z-score'};
-ylimsall = [-1 cfg.ylim(1)];
+ylab = {'Number of significant'; 'sequences'};
+ylimsall = [0 cfg.ylim(1)];
 yticksall = ylimsall(1):cfg.ylimtick(1):ylimsall(2);
-ylimssing = [-2 cfg.ylim(2)];
+ylimssing = [0 cfg.ylim(2)];
 ytickssing = ylimssing(1):cfg.ylimtick(2):ylimssing(2);
 
-location = [1 2]; % where to place the bar
-xlims = [0 location(end)+1];
+location = [1 2 4 5]; % where to place the bar
+xlims = [0 location(4)+1];
 
 % main plots
 for iW = 1:length(what)
     
     subplot(4,6,what_idx{iW});
     
-    this_data_all{1} = data.(what{iW}).(rats{iRat}).food_median_z;
-    this_data_all{2} = data.(what{iW}).(rats{iRat}).water_median_z;
-    this_data = [nanmean(this_data_all{1}) nanmean(this_data_all{2})];
+    switch cfg.type
+        case 'counts'
+            this_data = [data.(what{iW}).data.(rats{iRat}).food_left data.(what{iW}).data.(rats{iRat}).food_right ...
+                data.(what{iW}).data.(rats{iRat}).water_left data.(what{iW}).data.(rats{iRat}).water_right];
+        case 'props'
+            this_data = [data.(what{iW}).data.(rats{iRat}).food_leftN data.(what{iW}).data.(rats{iRat}).food_rightN ...
+                data.(what{iW}).data.(rats{iRat}).water_leftN data.(what{iW}).data.(rats{iRat}).water_rightN];
+        otherwise
+            error('Unknown type %s',cfg.type);
+    end
     
     % plot the data
     for iBar = 1:length(this_data)
         h(iBar) = bar(location(iBar),this_data(iBar),'FaceColor',col{iBar},'EdgeColor','none');
         hold on
-        plot(location(iBar),this_data_all{iBar},'.k');
     end
-    set(gca,'XTick',location,'XTickLabel',{'F','W'},'FontSize',cfg.fs,'LineWidth',1,'XLim',xlims);
-    set(gca,'YLim',ylimsall,'YTick',yticksall,'TickDir','out')
-    %xlabel('  food                  water','FontSize',cfg.fs)
-    ylabel(ylab,'FontSize',cfg.fs)
+    set(gca,'XTick',location,'XTickLabel',{'L' 'R' 'L' 'R'},'FontSize',cfg.fs,'LineWidth',1,'XLim',xlims);
+    set(gca,'YLim',ylimsall,'YTick',yticksall)
+    xlabel('  food                  water','FontSize',cfg.fs)
+    ylabel([ylab{1},' ',ylab{2}],'FontSize',cfg.fs)
     title(sprintf('%s %.2f',what{iW},biasfun(this_data)));
     box off
     set(gca,'Layer','top')
@@ -75,12 +73,6 @@ for iW = 1:length(what)
             'HorizontalAlignment','right',...
             'FontSize',cfg.fs)
     end
-    
-    % some stats
-    m1 = nanmean(this_data_all{1}); s1 = nanstd(this_data_all{1})./sqrt(4); % SEM
-    m2 = nanmean(this_data_all{2}); s2 = nanstd(this_data_all{2})./sqrt(4); % SEM
-    p = ranksum(this_data_all{1},this_data_all{2});
-    fprintf('%s: food %.2f +/ %.2f, water %.2f +/- %.2f, p = %.2e\n',what{iW},m1,s1,m2,s2,p);
     
 end % of whats for main plots
 
@@ -99,8 +91,17 @@ for iRat = 1:length(rats)
     
     subplot(4,6,position(iW))
     
-    this_data = [nanmean(data.(what{iW}).(rats{iRat}).food_median_z) nanmean(data.(what{iW}).(rats{iRat}).water_median_z)];
-    
+    switch cfg.type
+        case 'counts'
+            this_data = [data.(what{iW}).data.(rats{iRat}).food_left data.(what{iW}).data.(rats{iRat}).food_right ...
+                data.(what{iW}).data.(rats{iRat}).water_left data.(what{iW}).data.(rats{iRat}).water_right];
+        case 'props'
+            this_data = [data.(what{iW}).data.(rats{iRat}).food_leftN data.(what{iW}).data.(rats{iRat}).food_rightN ...
+                data.(what{iW}).data.(rats{iRat}).water_leftN data.(what{iW}).data.(rats{iRat}).water_rightN];
+        otherwise
+            error('Unknown type %s',cfg.type);
+    end
+        
     for iBar = 1:length(this_data)
         h(iBar) = bar(location(iBar),this_data(iBar),'FaceColor',col{iBar},'EdgeColor','none');
         hold on
@@ -108,24 +109,21 @@ for iRat = 1:length(rats)
     
     if position(1) == 13 || position(1) == 19
         yticks = ytickssing;
-        %ylabel(ylab,'FontSize',cfg.fs-2)
+        ylabel(ylab,'FontSize',cfg.fs-2)
     else
         yticks = [];
     end
     
-    %set(gca,'XTick',location,'XTickLabel',{'L' 'R' 'L' 'R'},'FontSize',cfg.fs-2,'LineWidth',1,'XLim',xlims);
-    %set(gca,'YLim',ylimssing,'YTick',yticks)
-    set(gca,'XTick',[],'XTickLabel',[],'FontSize',cfg.fs-2,'LineWidth',1,'XLim',xlims);
-    set(gca,'YLim',ylimssing,'YTick',[])
-    %xlabel('  food   water','FontSize',cfg.fs-2)
+    set(gca,'XTick',location,'XTickLabel',{'L' 'R' 'L' 'R'},'FontSize',cfg.fs-2,'LineWidth',1,'XLim',xlims);
+    set(gca,'YLim',ylimssing,'YTick',yticks)
+    xlabel('  food   water','FontSize',cfg.fs-2)
     box off
     set(gca,'Layer','top')
-    %txt = sprintf('%s %.2f',rats{iRat},biasfun(this_data));
-    txt = sprintf('%.2f',biasfun(this_data));
+    txt = sprintf('%s %.2f',rats{iRat},biasfun(this_data));
     text(xName,yName,txt,'Units','normalized',...
         'VerticalAlignment','bottom',...
         'HorizontalAlignment','right',...
-        'FontSize',cfg.fs-6)
+        'FontSize',cfg.fs-2)
     
     end % of ratwhats
     
