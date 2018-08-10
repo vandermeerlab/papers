@@ -47,17 +47,20 @@ for iW = 1:length(what)
         case 'counts'
             this_data = [data.(what{iW}).data.(rats{iRat}).food_left data.(what{iW}).data.(rats{iRat}).food_right ...
                 data.(what{iW}).data.(rats{iRat}).water_left data.(what{iW}).data.(rats{iRat}).water_right];
+            session_data = IndivSessionData(data.(what{iW}).data.(rats{iRat}).ALL_sig_seq);
         case 'props'
             this_data = [data.(what{iW}).data.(rats{iRat}).food_leftN data.(what{iW}).data.(rats{iRat}).food_rightN ...
                 data.(what{iW}).data.(rats{iRat}).water_leftN data.(what{iW}).data.(rats{iRat}).water_rightN];
+            [~,session_data] = IndivSessionData(data.(what{iW}).data.(rats{iRat}).ALL_sig_seq);
         otherwise
             error('Unknown type %s',cfg.type);
     end
-    
+          
     % plot the data
     for iBar = 1:length(this_data)
         h(iBar) = bar(location(iBar),this_data(iBar),'FaceColor',col{iBar},'EdgeColor','none');
         hold on
+        plot(location(iBar),session_data(iBar,:),'.k');
     end
     set(gca,'XTick',location,'XTickLabel',{'L' 'R' 'L' 'R'},'FontSize',cfg.fs,'LineWidth',1,'XLim',xlims);
     set(gca,'YLim',ylimsall,'YTick',yticksall)
@@ -101,7 +104,7 @@ for iRat = 1:length(rats)
         otherwise
             error('Unknown type %s',cfg.type);
     end
-        
+    
     for iBar = 1:length(this_data)
         h(iBar) = bar(location(iBar),this_data(iBar),'FaceColor',col{iBar},'EdgeColor','none');
         hold on
@@ -141,5 +144,38 @@ if cfg.writeOutput
 end
 
 
-
+function [out,outN] = IndivSessionData(data)
+% outputs 4 x nSessions individual session data for food-left, food-right, water-left, water-right
+%
+% input: ALL_sig_seq for data of interest
+out = []; outN = [];
+all_sessions = unique(data.sess);
+for iS = 1:length(all_sessions)
+    
+    this_S = all_sessions(iS);
+    
+    this_out = nan(4,1); % food-left, food-right, water-left, water-right for this session
+    this_outN = nan(4,1); % food-left, food-right, water-left, water-right for this session
+    
+    %for iArm = 1:2
+        
+        data_idx = find(data.sess == this_S);% & data.arm == iArm);
+        this_data = data.count(data_idx); this_dataN = data.countN(data_idx);
+        this_restrict = data.type(data_idx);
+        
+        if length(unique(this_restrict)) > 1, error('Session should not have more than one restriction type!'); end
+        this_restrict = unique(this_restrict);
+        
+        switch this_restrict % check if food or water restriction
+            case 1 % food
+                this_out(1:2) = this_data; this_outN(1:2) = this_dataN;
+            case 2 % water
+                this_out(3:4) = this_data; this_outN(3:4) = this_dataN;
+        end
+        
+    %end
+    
+    out = cat(2,out,this_out); outN = cat(2,outN,this_outN);
+    
+end
 
