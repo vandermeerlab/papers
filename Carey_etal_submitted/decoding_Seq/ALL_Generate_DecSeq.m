@@ -1,4 +1,4 @@
-% basic batch script to generate sequence detection based on decoded data
+% basic batch script to generate decoding for sequence detection
 
 %%
 cfg = []; 
@@ -8,7 +8,7 @@ cfg.requireMetadata = 1;
 cfg.MetadataFields = {'coord','taskvars'};
 cfg.requireCandidates = 1;
 cfg.requireVT = 1;
-cfg.requireTimes = 1; %R042 only
+cfg.requireTimes = 1;
 cfg.requireFiles = 1;
 cfg.rats = {'R042','R044','R050','R064'};
 cfg.excludeSessions = [1 7 8 9 12]; % sessions with insufficient cells
@@ -19,12 +19,12 @@ if proceed
     fd(cfg.excludeSessions) = [];
     
     cfg_decSeq = [];
-    cfg_decSeq.minSeqLength = 10;
+    cfg_decSeq.minSeqLength = 10; % minimum sequence length in time steps (cfg_def.Qdt in Generate_DecSeqShuf)
     cfg_decSeq.removeInterneurons = 0;
-    cfg_decSeq.nMinNeurons = 4;
-    cfg_decSeq.nMaxNanSkipSequential = 0;
-    cfg_decSeq.output_file_prefix = 'S0_';
-    cfg_decSeq.nShuffles = 1000;
+    cfg_decSeq.nMinNeurons = 4; % minimum number of neurons that must be active for posterior to be retained (set to NaN otherwise)
+    cfg_decSeq.nMaxNanSkipSequential = 0; % number of consecutive bins that can be NaN
+    cfg_decSeq.output_file_prefix = 'S1_';
+    cfg_decSeq.nShuffles = 500;
     
     for iFD = 1:length(fd)
         

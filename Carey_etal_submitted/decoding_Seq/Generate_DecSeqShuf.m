@@ -1,5 +1,5 @@
-function out = Generate_DecSeq(cfg_in)
-% function out = Generate_DecSeq(cfg_in)
+function out = Generate_DecSeqShuf(cfg_in)
+% function out = Generate_DecSeqShuf(cfg_in)
 %
 % run decoding sequence detection analysis from within session data folder
 %
@@ -65,7 +65,6 @@ cfg_def.keepPosterior = 0;
 cfg_def.nShuffles = 100;
 
 nMaxLaps = 20;
-%cfg_def.encdecmat = 1-eye(20);
 cfg_def.encdecmat = ones(1,nMaxLaps);
 
 cfg = ProcessConfig(cfg_def,cfg_in);
