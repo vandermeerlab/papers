@@ -1,9 +1,19 @@
-%% summary plot for L vs R decoding accuracy
+% PLOT_DecSeqCombined.m
+%
+% script to collect and plot sequenceless decoding results 
+%
 % assumes ALL_Generate_DecSeqCombined.m is run
-cfg = [];
-cfg.sess = [2:6 10:11 13:24];
+%
+% parameter settings of interest:
+%
+% cfg.cutoff = 0.025; significance threshold defining tails z-scored L/R log 
+%   odds distribution at which a decoded SWR is considered significantly left 
+%   or right
 
-cfg.fn = fieldnames(out{1}); cfg.fn = cfg.fn(1:12);
+%% L vs R classification of run data (Figure S2b)
+% first, grab relevant fields from output structure
+cfg = []; cfg.sess = [2:6 10:11 13:24];
+cfg.fn = fieldnames(out{1}); cfg.fn = cfg.fn(1:12); % relevant fields are the first 12 names
 
 for iF = 1:length(cfg.fn)
    
@@ -15,7 +25,7 @@ for iF = 1:length(cfg.fn)
     end
     
 end
-%% L vs R classification
+
 xd = [1 2 4 5];
 ywhat = {'left_preCP_correct','left_postCP_correct','right_preCP_correct','right_postCP_correct'};
 ychance = {'left_chance_pre','left_chance_post','right_chance_pre','right_chance_post'};
@@ -73,14 +83,13 @@ for iSess = 1:length(cfg.sess)
             this_type = 0; % food on the left
     end
     
-    % behavior TO BE MODIFIED
+    % behavior
     this_trials = length(strmatch('L',metadata.taskvars.sequence));
     this_trials = this_trials./length(metadata.taskvars.sequence);
   
     choice_trial_idx = setdiff(1:length(metadata.taskvars.sequence),ExpKeys.forcedTrials);
     choice_trials = metadata.taskvars.sequence(choice_trial_idx);
     this_choice = length(strmatch('L',choice_trials))./length(choice_trials);
-    % END TO BE MODIFIED
     
     this_data = out{this_sess};
     this_rat = ExpKeys.goodSWR{1}(1:4);
@@ -173,10 +182,9 @@ PLOT_MotivationalBias_NoSequencesZ([],data);
 set(gcf,'Position',[680          55         691        1043]);
 set(gcf,'PaperPositionMode','auto')
 
-% what do stats look like for this? food vs water raw Z for all &
-% individual animals. 2 samples; t-test and wilcoxon.
-
 %% single-session plot
+figure;
+
 cfg_plot = [];
 cfg_plot.fs = 12;
 cfg_plot.offs = 0.03;

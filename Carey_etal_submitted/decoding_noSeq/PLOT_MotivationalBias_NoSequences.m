@@ -1,19 +1,21 @@
 function fh = PLOT_MotivationalBias_NoSequences(cfg_in,data)
 % function fh = PLOT_Motivational_NoSequences(cfg_in,data)
 %
-% plots SWR content averaged over sessions
-% (MotivationalT data set)
+% plots SWR content averaged over sessions as thresholded sequence
+% proportions (MotivationalT data set)
 %
 % INPUTS:
 %
 % cfg_in: options that control display properties
 %
 % data: struct with .all, .pre, .task, .post fields containing data output
-% by ALL_PlotDecSeqCombined2.m
-% these
+% from PLOT_DecSeqCombined
 %
-% OUTPUTS:
+% CONFIGS:
 %
+% the `what` variable below can be set to {'all'} to plot & analyze all 
+% data together, or to {'pre','task','post'} to plot epochs separately as 
+% done in the paper figures
 
 cfg_def = [];
 cfg_def.showAllRatsText = 0;
@@ -29,9 +31,10 @@ cfg = ProcessConfig(cfg_def,cfg_in);
 
 biasfun = @(d) (d(1)-d(2))-(d(3)-d(4)); % computes bias measure as (food_left-food_right)-(water_left-water_right) sequence content proportions
 
-%what = {'pre','task','post'};
-what = {'all'};
-what_idx = {[1 2 7 8],[3 4 9 10],[5 6 11 12]};
+what = {'pre','task','post'}; % plot & analyze pre-task, task and post-task epochs separately
+%what = {'all'}; % use this instead if you want to plot & analyze everything combined
+
+what_idx = {[1 2 7 8],[3 4 9 10],[5 6 11 12]}; % subplot indices for what to plot where
 
 % first plot data for all rats
 rats = {'all'}; iRat = 1;
