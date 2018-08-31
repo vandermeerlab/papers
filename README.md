@@ -8,7 +8,7 @@ Makes extensive use of the
 Wiki-based tutorials introducing the data formats including
 annotations and metadata, the codebase architecture, and commonly used
 analyses can be found
-[here](http://ctnsrv.uwaterloo.ca/vandermeerlab/doku.php?id=analysis:course-w16). Several
+[here](http://discovery.dartmouth.edu/~mvdm/wiki/doku.php?id=analysis:nsb2018). Several
 publications have publicly available data sets associated with them;
 see the README files for details.
 
