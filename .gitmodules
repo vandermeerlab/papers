@@ -1,3 +1,6 @@
 [submodule "Gmaz_etal_submitted/vStrCueCodingPaper"]
 	path = Gmaz_etal_submitted/vStrCueCodingPaper
 	url = https://github.com/jgmaz/vStrCueCodingPaper
+[submodule "Gmaz_etal_2018/vStrCueCodingPaper"]
+	path = Gmaz_etal_2018/vStrCueCodingPaper
+	url = https://github.com/jgmaz/vStrCueCodingPaper/
