@@ -31,6 +31,7 @@ function out = Generate_DecSeqCombined(cfg_in)
 % cfg_def.Qboxcar = 5; % boxcar smoothing of spike counts (in bins). So Qdt = 0.005 and Qboxcar = 5 give a true bin size of 25ms, moved in 5ms steps.
 % cfg_def.writeFiles = 1;
 % cfg_def.removeInterneurons = 0;
+% cfg_def.postCPonly = 1; % if 1, only include maze arms (beyond choice point)
 %
 % MvdM 2015
 
@@ -58,11 +59,11 @@ cfg_def.plotOutput = 0;
 cfg_def.Qdt = cfg_def.dt/5;
 cfg_def.Qboxcar = 5; % if cfg_def.Qdt ~= cfg_def.dt, cfg_def.Qboxcar should be set to cfg_def.dt/cfg_def.Qdt to implement moving window
 cfg_def.writeFiles = 1;
-cfg_def.removeInterneurons = 1;
+cfg_def.removeInterneurons = 0;
 cfg_def.keepPosterior = 0;
+cfg_def.postCPonly = 1;
 
 nMaxLaps = 20;
-%cfg_def.encdecmat = 1-eye(20);
 cfg_def.encdecmat = ones(1,nMaxLaps);
 
 cfg = ProcessConfig(cfg_def,cfg_in);
@@ -255,17 +256,8 @@ if this_TCsmooth ~= 0
     cfg_tc.smoothingKernel = gausskernel(51,this_TCsmooth);
 end
 
-%enc_laps = cfg.encdecmat(1:length(laps_combined.tstart));  % find laps to use for decoding
-%cfg_select = []; cfg_select.verbose = 0;
-%lap_iv = SelectIV(cfg_select,laps_combined,find(enc_laps));
-
 enc_S = restrict(expComb.S,expComb.t);
 enc_linpos = restrict(expComb.linpos,expComb.t);
-
-% could be empty -- no cells for this lap's encoding model
-%if all(cellfun(@isempty,enc_S.t))
-%    continue;
-%end    
 
 expComb.tc = TuningCurves(cfg_tc,enc_S,enc_linpos);
 expComb.fields = DetectPlaceCells1D([],expComb.tc.tc); % only used for plotting later
@@ -309,20 +301,23 @@ expComb.P = DecodeZ(cfg_decode,expComb.Q,expComb.tc.tc); % full decoded probabil
 toss_idx = isnan(nansum(expComb.P.data));
 map(toss_idx) = NaN;
 
-imagesc(expComb.P.tvec,1:size(expComb.P.data,1),expComb.P.data);
-hold on;
-plot(expComb.P.tvec,map,'.w');
-plot(expComb.linpos.tvec,expComb.tc.pos_idx,'og');
+if cfg.plotOutput
+    imagesc(expComb.P.tvec,1:size(expComb.P.data,1),expComb.P.data);
+    hold on;
+    plot(expComb.P.tvec,map,'.w');
+    plot(expComb.linpos.tvec,expComb.tc.pos_idx,'og');
+    
+    figure;
+    subplot(221);
+    hist(map,cfg.nBins*2);
+    title('MAP histogram');
+    
+    subplot(222);
+    hist(nansum(expComb.P.data));
+    title('summed posterior histogram');
 
-%% some more diagnostics
-figure;
-subplot(221);
-hist(map,cfg.nBins*2);
-title('MAP histogram');
+end
 
-subplot(222);
-hist(nansum(expComb.P.data));
-title('summed posterior histogram');
 
 %% quantify decoding accuracy on RUN
 this_trueZ = tsd(expComb.linpos.tvec,expComb.tc.pos_idx); % true position in units of bins (as established by tuning curves)
@@ -334,13 +329,15 @@ this_Pscore.tvec = this_Pscore.tvec(keep_idx);
 this_Pscore.data = this_Pscore.data(:,keep_idx);
 [expComb.Perr,expComb.confMat] = DecodeErrorZ(cfg_err,this_Pscore,this_trueZ);
 
-subplot(223);
-imagesc(expComb.confMat.full);
-caxis([0 0.1]);
-
-hold on;
-h = plot([112 112],[1 223],'w');
-h2 = plot([1 223],[112 112],'w');
+if cfg.plotOutput
+    subplot(223);
+    imagesc(expComb.confMat.full);
+    caxis([0 0.1]);
+    
+    hold on;
+    h = plot([112 112],[1 223],'w');
+    h2 = plot([1 223],[112 112],'w');
+end
 
 %% compare quadrants
 cfy = @(x) x(:);
@@ -395,15 +392,17 @@ expComb.P_SWR = DecodeZ(cfg_decode,Q_SWR,expComb.tc.tc); % full decoded probabil
 
 % obtain log odds
 div = ceil(size(expComb.tc.tc,2)/2); % divider between L & R tuning curves
-pL = nansum(expComb.P_SWR.data(1:div-1,:)); pR = nansum(expComb.P_SWR.data(div:end,:));
-actual_odds = log2(pL./pR);
-
-% for each one, shuffle... what are the right shuffles here? reassign L vs
-% R tuning curves? reassign spikes to neurons?
+if cfg.postCPonly
+    this_cp = expCond(2).cp_bin;
+    pL = nansum(expComb.P_SWR.data(this_cp+1:div-1,:)); pR = nansum(expComb.P_SWR.data(div+this_cp+1:end,:));
+else
+    pL = nansum(expComb.P_SWR.data(1:div-1,:)); pR = nansum(expComb.P_SWR.data(div:end,:));
+end
+actual_odds = log2(pL./pR); % this measure is not ideal because of Infs, but pL-pR gives similar results
 
 %% L vs R shuffle
 cfg_shuf_LR = [];
-cfg_shuf_LR.nShuffles = 10;
+cfg_shuf_LR.nShuffles = 1000;
 
 nCells = size(expComb.tc.tc,1);
 
@@ -421,12 +420,16 @@ for iShuf = cfg_shuf_LR.nShuffles:-1:1
     
     % obtain log odds
     div = ceil(size(expComb.tc.tc,2)/2); % divider between L & R tuning curves
-    pL = nansum(expComb.P_SWR.data(1:div-1,:)); pR = nansum(expComb.P_SWR.data(div:end,:));
+    if cfg.postCPonly
+        pL = nansum(expComb.P_SWR.data(this_cp+1:div-1,:)); pR = nansum(expComb.P_SWR.data(div+this_cp+1:end,:));
+    else
+        pL = nansum(expComb.P_SWR.data(1:div-1,:)); pR = nansum(expComb.P_SWR.data(div:end,:));
+    end
     shuf_odds(iShuf,:) = log2(pL./pR);
-
 end
 out.shuf_perc = nansum(shuf_odds < repmat(actual_odds,[cfg_shuf_LR.nShuffles 1]))./cfg_shuf_LR.nShuffles;
 out.shuf_z = (actual_odds-nanmean(shuf_odds))./nanstd(shuf_odds);
+
 out.tvec = tvec_centers;
 % odds are left over right. So percentile = big means left, percentile =
 % small means right.
