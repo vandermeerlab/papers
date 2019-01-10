@@ -120,22 +120,22 @@ for iSess = 1:length(cfg.sess)
         end
         
         this_dataR = this_data;
-        fnames = {'shuf_percCP','shuf_zCP','tvec'};
+        fnames = {'shuf_perc','shuf_z','tvec'};
         for iF = 1:length(fnames)
             temp = this_dataR.(fnames{iF});
             this_dataR.(fnames{iF}) = temp(keep{1});
         end
         
         % get the data of interest
-        nL = sum(this_dataR.shuf_percCP >= 1-cfg.cutoff); % odds are log(pL/pR) so left means big numbers vs. shuffle
-        nR = sum(this_dataR.shuf_percCP <= cfg.cutoff); % odds are log(pL/pR) so right means small numbers vs. shuffle
+        nL = sum(this_dataR.shuf_perc >= 1-cfg.cutoff); % odds are log(pL/pR) so left means big numbers vs. shuffle
+        nR = sum(this_dataR.shuf_perc <= cfg.cutoff); % odds are log(pL/pR) so right means small numbers vs. shuffle
         nE = length(this_dataR.tvec);
               
         fracL_all = nL/nE; fracR_all = nR/nE;  % fraction of events (over all events)
         fracL_evt = nL/(nL+nR); fracR_evt = nR/(nL+nR);  % fraction of events (signif events only)
         
-        median_z = nanmedian(this_dataR.shuf_zCP); % median z-score      
-        median_perc = nanmedian(this_dataR.shuf_percCP);  % median percentile vs. shuffle
+        median_z = nanmedian(this_dataR.shuf_z); % median z-score      
+        median_perc = nanmedian(this_dataR.shuf_perc);  % median percentile vs. shuffle
         
         % append to big data structure
         for iV = 1:length(vars)
