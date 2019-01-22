@@ -26,16 +26,14 @@ cfg_def.ylim = [1 2];
 cfg_def.ylimtick = [0.5 0.5];
 cfg_def.writeOutput = 0;
 cfg_def.output_fn = 'temp';
+cfg_def.what = {'all'}; % {'all'}, or {'pre', 'task', 'post'} to analyze pre-task, task and post-task epochs separately
 
 cfg = ProcessConfig(cfg_def, cfg_in);
 
 biasfun = @(d) (d(1)-d(2)); % computes bias measure as (food-water)
 
 %%
-
-%what = {'pre', 'task', 'post'}; % plot & analyze pre-task, task and post-task epochs separately
-what = {'all'}; % use this instead if you want to plot & analyze everything combined
-
+what = cfg.what;
 what_idx = {[1 2 7 8], [3 4 9 10], [5 6 11 12]};
 
 % first plot data for all rats
@@ -60,7 +58,7 @@ for iW = 1:length(what) % loop over epochs
     
     % arrange the shuffled data
     this_shuf_mean = [data.(what{iW}).(rats{iRat}).foodShuf_fracL_evt data.(what{iW}).(rats{iRat}).waterShuf_fracL_evt data.(what{iW}).(rats{iRat}).diffShuf_fracL_evt + 0.5];
-    this_shuf_sd = [data.(what{iW}).(rats{iRat}).foodShufsd_fracL_evt data.(what{iW}).(rats{iRat}).waterShufsd_fracL_evt data.(what{iW}).(rats{iRat}).diffShufsd_fracL_evt] ./ sqrt(4);
+    this_shuf_sd = [data.(what{iW}).(rats{iRat}).foodShufsd_fracL_evt data.(what{iW}).(rats{iRat}).waterShufsd_fracL_evt data.(what{iW}).(rats{iRat}).diffShufsd_fracL_evt];
     
     % some stats
     m1 = nanmean(this_data_all{1}); s1 = nanstd(this_data_all{1}) ./ sqrt(4); % SEM
