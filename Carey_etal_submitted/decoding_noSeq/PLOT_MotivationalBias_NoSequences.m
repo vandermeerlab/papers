@@ -26,14 +26,13 @@ cfg_def.ylim = [1 1];
 cfg_def.ylimtick = [0.25 1];
 cfg_def.writeOutput = 0;
 cfg_def.output_fn = 'temp';
+cfg_def.what = {'all'}; % {'all'}, or {'pre', 'task', 'post'} to analyze pre-task, task and post-task epochs separately
 
 cfg = ProcessConfig(cfg_def,cfg_in);
 
 biasfun = @(d) (d(1)-d(2))-(d(3)-d(4)); % computes bias measure as (food_left-food_right)-(water_left-water_right) sequence content proportions
 
-what = {'pre','task','post'}; % plot & analyze pre-task, task and post-task epochs separately
-%what = {'all'}; % use this instead if you want to plot & analyze everything combined
-
+what = cfg.what;
 what_idx = {[1 2 7 8],[3 4 9 10],[5 6 11 12]}; % subplot indices for what to plot where
 
 % first plot data for all rats
@@ -86,8 +85,8 @@ for iW = 1:length(what)
     % some statistics
     fracs = cat(1,this_data_all{1},this_data_all{2}, ...
        this_data_all{3},this_data_all{4});
-    lr = cat(1,zeros(9,1),ones(9,1),zeros(10,1),ones(10,1));
-    fw = cat(1,zeros(18,1),ones(20,1));
+    lr = cat(1,zeros(size(this_data_all{1})),ones(size(this_data_all{2})),zeros(size(this_data_all{3})),zeros(size(this_data_all{4})));
+    fw = cat(1,zeros(size(cat(1,this_data_all{1},this_data_all{2}))),ones(size(cat(1,this_data_all{3},this_data_all{4}))));
     
     [P,T,STATS,TERMS] = anovan(fracs',{fw',lr'},'varnames',{'foodwater','leftright'},'model','interaction');
     
