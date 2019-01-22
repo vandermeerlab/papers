@@ -82,6 +82,7 @@ if proceed
     % combined rat data
     all.nSessions = 0;
     all.sessionChoice = []; % did they choose L or R
+    all.sessionLatency = []; % trial length
     all.sessionType = []; % was it a food or a water day
     all.nfood_chooseFood = 0; % the number of times a food restricted rat chose food reward
     all.nfood_chooseWater = 0; % the number of times a food restricted rat chose water reward
@@ -98,6 +99,7 @@ if proceed
 
         %this holds the arm choices for each session separately
         sessionChoice = nan(length(fd),25); % length(fd) is same as number of sessions; 25 is more than the max trials done during any sessions
+        sessionLatency = nan(length(fd),25);
         sessionType = (1:length(fd))'; % will fill in session restriction type below: 1 = food, 2 = water
         all.nSessions = all.nSessions + length(fd);
         type = []; arm = [];
@@ -109,9 +111,9 @@ if proceed
             LoadExpKeys
             LoadMetadata;
             
-            sequence = metadata.taskvars.sequence;           
+            sequence = metadata.taskvars.sequence; latencies = metadata.taskvars.trial_iv.tend - metadata.taskvars.trial_iv.tstart;          
             remove = sort(unique([ExpKeys.forcedTrials ExpKeys.badTrials]));
-            sequence(remove) = [];
+            sequence(remove) = []; latencies(remove) = [];
             nTrials = [nTrials; length(sequence)];
             
             restrictiontype = find(strcmp(ExpKeys.RestrictionType,cfg.sessions));
@@ -137,6 +139,7 @@ if proceed
             end
             
             sessionChoice(iFD,1:length(sequenceID)) = sequenceID;
+            sessionLatency(iFD,1:length(sequenceID)) = latencies';
         end
         
         %count food days and food day trials
@@ -200,6 +203,7 @@ if proceed
         % omg my script is too convoluted. collect these things for the
         % out-of-loop aggregation of all rat data
         all.sessionChoice = [all.sessionChoice; sessionChoice];
+        all.sessionLatency = [all.sessionLatency; sessionLatency];
         all.sessionType = [all.sessionType; sessionType];
         
     end
