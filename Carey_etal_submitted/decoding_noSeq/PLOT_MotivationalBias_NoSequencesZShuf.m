@@ -26,16 +26,14 @@ cfg_def.ylim = [1 2];
 cfg_def.ylimtick = [0.5 0.5];
 cfg_def.writeOutput = 0;
 cfg_def.output_fn = 'temp';
+cfg_def.what = {'all'}; % {'all'}, or {'pre', 'task', 'post'} to analyze pre-task, task and post-task epochs separately
 
 cfg = ProcessConfig(cfg_def, cfg_in);
 
 biasfun = @(d) (d(1)-d(2)); % computes bias measure as (food-water)
 
 %%
-
-what = {'pre', 'task', 'post'}; % plot & analyze pre-task, task and post-task epochs separately
-%what = {'all'}; % use this instead if you want to plot & analyze everything combined
-
+what = cfg.what;
 what_idx = {[1 2 7 8], [3 4 9 10], [5 6 11 12]};
 
 % first plot data for all rats
@@ -60,7 +58,7 @@ for iW = 1:length(what) % loop over epochs
     
     % arrange the shuffled data
     this_shuf_mean = [data.(what{iW}).(rats{iRat}).foodShuf_median_z data.(what{iW}).(rats{iRat}).waterShuf_median_z data.(what{iW}).(rats{iRat}).diffShuf_median_z];
-    this_shuf_sd = [data.(what{iW}).(rats{iRat}).foodShufsd_median_z data.(what{iW}).(rats{iRat}).waterShufsd_median_z data.(what{iW}).(rats{iRat}).diffShufsd_median_z] ./ sqrt(4); % SEM
+    this_shuf_sd = [data.(what{iW}).(rats{iRat}).foodShufsd_median_z data.(what{iW}).(rats{iRat}).waterShufsd_median_z data.(what{iW}).(rats{iRat}).diffShufsd_median_z];
     
     % some stats
     m1 = nanmean(this_data_all{1}); s1 = nanstd(this_data_all{1}) ./ sqrt(4); % SEM
@@ -89,7 +87,7 @@ for iW = 1:length(what) % loop over epochs
         
         % stats
         this_z = (this_data(iBar) - this_shuf_mean(iBar)) ./ this_shuf_sd(iBar);
-        this_p = normpdf(this_z);
+        this_p = 2*normcdf(abs(this_z), 0, 1, 'upper');
         fprintf('%s: z %.2f, p %.2e\n', ylab{iBar}, this_z, this_p);
         
         DrawStars(cfg, this_p, [this_data(iBar) location(iBar)+0.37]);
@@ -150,7 +148,7 @@ for iRat = 1:length(rats)
             end
                        
         end
-        set(gca, 'XTick', [-1.5 1.5], 'FontSize', 8, 'LineWidth', 0.5, 'XLim', [-1.5 1.5], 'XTickLabel', {'W', 'F'}, 'XDir', 'reverse');
+        set(gca, 'XTick', [-2 2], 'FontSize', 8, 'LineWidth', 0.5, 'XLim', [-2 2], 'XTickLabel', {'W', 'F'}, 'XDir', 'reverse');
         set(gca, 'YLim' , ylims, 'YTick', 1:3, 'TickDir', 'out', 'YTickLabel', ylab(location));
         %title(sprintf('%s', what{iW})); box off
         set(gca,'Layer','top')

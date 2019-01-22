@@ -87,7 +87,7 @@ for iW = 1:length(what) % loop over epochs
         
         % stats
         this_z = (this_data(iBar) - this_shuf_mean(iBar)) ./ this_shuf_sd(iBar);
-        this_p = normpdf(this_z);
+        this_p = 2*normcdf(abs(this_z), 0, 1, 'upper');
         fprintf('%s: z %.2f, p %.2e\n', ylab{iBar}, this_z, this_p);
         
         DrawStars(cfg, this_p, [this_data(iBar) location(iBar)+0.37]);

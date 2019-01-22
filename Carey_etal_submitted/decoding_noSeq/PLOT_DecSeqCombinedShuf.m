@@ -6,7 +6,7 @@
 %
 % parameter settings of interest:
 %
-% cfg.cutoff = 0.025; significance threshold defining tails z-scored L/R log 
+% cfg.cutoff = 0.05; significance threshold defining tails z-scored L/R log 
 %   odds distribution at which a decoded SWR is considered significantly left 
 %   or right
 
@@ -55,7 +55,7 @@ box off;
 %% collect data for L vs R SWR decoding
 cfg = [];
 cfg.sess = [2:6 10:11 13:24];
-cfg.cutoff = 0.025; % percentile to include
+cfg.cutoff = 0.05; % percentile to include
 
 % initialize variables to append to later
 clear data;
@@ -171,7 +171,7 @@ for iR = 1:length(rats)
         
             % shuffles -- randomly reassign food/water for all sessions
             all_food = randi(2, nShuf, 1) - 1;
-            shuf_food = []; shuf_water = [];
+            shuf_food = []; shuf_water = []; shuf_diff = [];
             for iS = nShuf:-1:1
                 
                 this_type = this_type(randperm(length(this_type)));
@@ -181,6 +181,7 @@ for iR = 1:length(rats)
                 
                 shuf_food(iS) = nanmean(this_food);
                 shuf_water(iS) = nanmean(this_water);
+                shuf_diff(iS) = nanmean(this_food) - nanmean(this_water);
                 
             end
             
@@ -194,25 +195,46 @@ for iR = 1:length(rats)
             data.(what{iW}).(rats{iR}).(waterS_varname) = nanmean(shuf_water);
             data.(what{iW}).(rats{iR}).(waterSsd_varname) = nanstd(shuf_water);
             
-            data.(what{iW}).(rats{iR}).(diffS_varname) = nanmean(shuf_food - shuf_water);
-            data.(what{iW}).(rats{iR}).(diffSsd_varname) = nanstd(shuf_food - shuf_water);
+            data.(what{iW}).(rats{iR}).(diffS_varname) = nanmean(shuf_diff);
+            data.(what{iW}).(rats{iR}).(diffSsd_varname) = nanstd(shuf_diff);
             
         end % of vars
     end
 end
 
 %% proportion events with "significant" odds
-%
-% need to update this to plot and output shuffle statistics!
+% old
 figure;
 PLOT_MotivationalBias_NoSequences([],data);
 set(gcf,'Position',[680          55         691        1043]);
 set(gcf,'PaperPositionMode','auto')
 
+%% new
+figure;
+PLOT_MotivationalBias_NoSequencesShuf([],data);
+set(gcf,'PaperPositionMode','auto')
+
+figure;
+cfg_plot = [];
+cfg_plot.what = {'pre', 'task', 'post'};
+PLOT_MotivationalBias_NoSequencesShuf(cfg_plot,data);
+set(gcf,'PaperPositionMode','auto')
 %% raw z-scores
+% old
 figure;
 PLOT_MotivationalBias_NoSequencesZ([],data);
 set(gcf,'Position',[680          55         691        1043]);
+set(gcf,'PaperPositionMode','auto')
+
+%% new
+figure;
+PLOT_MotivationalBias_NoSequencesZShuf([],data);
+set(gcf,'PaperPositionMode','auto')
+
+figure;
+cfg_plot = [];
+cfg_plot.what = {'pre', 'task', 'post'};
+PLOT_MotivationalBias_NoSequencesZShuf(cfg_plot,data);
 set(gcf,'PaperPositionMode','auto')
 
 %% single-session plot
