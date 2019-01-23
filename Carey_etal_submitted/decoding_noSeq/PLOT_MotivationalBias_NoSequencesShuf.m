@@ -150,7 +150,7 @@ for iRat = 1:length(rats)
         end
         set(gca, 'XTick', 0:0.25:1, 'FontSize', 8, 'LineWidth', 1, 'XLim', [0 1], 'XTickLabel', {'0 (W)', '', '0.5', '', '1 (F)'}, 'XDir', 'reverse');
         if iRat == 2
-            set(gca, 'XLim', [-0.25 1.25]);
+            set(gca, 'XLim', [-0.5 1.5]);
         end
         
         set(gca, 'YLim' , ylims, 'YTick', 1:3, 'TickDir', 'out', 'YTickLabel', ylab(location));

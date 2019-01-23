@@ -61,7 +61,7 @@ cfg_def.Qboxcar = 5; % if cfg_def.Qdt ~= cfg_def.dt, cfg_def.Qboxcar should be s
 cfg_def.writeFiles = 1;
 cfg_def.removeInterneurons = 0;
 cfg_def.keepPosterior = 0;
-cfg_def.postCPonly = 1;
+cfg_def.postCPonly = 0;
 
 nMaxLaps = 20;
 cfg_def.encdecmat = ones(1,nMaxLaps);
