@@ -31,10 +31,10 @@ cfg = ProcessConfig(cfg_def, cfg_in);
 rng('default');
 
 %% load data somehow
-temp = load('C:\temp\S1_DecSeq_prerecord_all_eligible_out'); data.pre = temp.data;
-temp = load('C:\temp\S1_DecSeq_taskrest_all_eligible_out'); data.task = temp.data;
-temp = load('C:\temp\S1_DecSeq_postrecord_all_eligible_out'); data.post = temp.data;
-temp = load('C:\temp\S1_DecSeq_all_all_eligible_out'); data.all = temp.data;
+temp = load('C:\temp\S1_DecSeq_prerecord_all_eligibleCP_out'); data.pre = temp.data;
+temp = load('C:\temp\S1_DecSeq_taskrest_all_eligibleCP_out'); data.task = temp.data;
+temp = load('C:\temp\S1_DecSeq_postrecord_all_eligibleCP_out'); data.post = temp.data;
+temp = load('C:\temp\S1_DecSeq_all_all_eligibleCP_out'); data.all = temp.data;
 
 %% first arrange data and do shuffles
 cfg.rats = {'R042','R044','R050','R064'};
@@ -45,6 +45,8 @@ for iEpoch = 1:length(cfg.epochs)
         
         this_e = cfg.epochs{iEpoch};
         this_do = toDo{iDo};
+        
+        data.(this_e).(this_do).ALL_sig_seq = removeNaNs(data.(this_e).(this_do).ALL_sig_seq); % remove sessions with zero counts
         
         % actual data
         data.(this_e).(this_do).food_left = data.(this_e).(this_do).ALL_sig_seq.count(data.(this_e).(this_do).ALL_sig_seq.arm == 1 & data.(this_e).(this_do).ALL_sig_seq.type == 1);
@@ -250,3 +252,17 @@ if cfg.writeOutput
     cd(originalFolder)
 end
 
+end % of main function
+
+%%
+function data = removeNaNs(data)
+
+keep_idx = ~isnan(data.countN);
+
+fn = fieldnames(data);
+for iF = 1:length(fn)
+    
+    data.(fn{iF}) = data.(fn{iF})(keep_idx);
+end
+
+end
