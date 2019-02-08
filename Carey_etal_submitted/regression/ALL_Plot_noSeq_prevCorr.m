@@ -95,3 +95,13 @@ glm1 = fitglme(tbl,modelspec1);
 glm2 = fitglme(tbl,modelspec2);
 
 compare(glm1,glm2)
+
+%% session n pre vs session n behavior
+behav_bias = max(cat(1,behav,1-behav)); % invert normalized behavior below 0.5 to above 0.5
+keep = [2:6 10 11 13:24];
+behav_bias = behav_bias(keep);
+
+content_bias = abs(data.pre.all.median_z);
+
+[r,p] = corrcoef(behav_bias,content_bias)
+plot(behav_bias,content_bias,'.');

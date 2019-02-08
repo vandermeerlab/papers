@@ -84,6 +84,8 @@ if proceed
     all.sessionChoice = []; % did they choose L or R
     all.sessionLatency = []; % trial length
     all.sessionType = []; % was it a food or a water day
+    all.pLeftBehav = []; % proportion of left (food) trials experienced (including forced trials) for each session
+    all.pLeftChoice = []; % proportion of left (food) trials *chosen* (i.e. counting only free choice trials) for each session
     all.nfood_chooseFood = 0; % the number of times a food restricted rat chose food reward
     all.nfood_chooseWater = 0; % the number of times a food restricted rat chose water reward
     all.nwater_chooseFood = 0;
@@ -103,7 +105,7 @@ if proceed
         sessionType = (1:length(fd))'; % will fill in session restriction type below: 1 = food, 2 = water
         all.nSessions = all.nSessions + length(fd);
         type = []; arm = [];
-        nTrials = [];
+        nTrials = []; pLeftBehav = []; pLeftChoice = [];
         % go through each session and do the thing
         for iFD = 1:length(fd)
             cd(fd{iFD}) 
@@ -111,10 +113,14 @@ if proceed
             LoadExpKeys
             LoadMetadata;
             
-            sequence = metadata.taskvars.sequence; latencies = metadata.taskvars.trial_iv.tend - metadata.taskvars.trial_iv.tstart;          
+            sequence = metadata.taskvars.sequence; latencies = metadata.taskvars.trial_iv.tend - metadata.taskvars.trial_iv.tstart;
+            behav_sequence = sequence; behav_sequence(ExpKeys.badTrials) = [];
+            pLeftBehav(iFD) = sum(strcmp(sequence,'L')==1)./length(sequence);
+            
             remove = sort(unique([ExpKeys.forcedTrials ExpKeys.badTrials]));
             sequence(remove) = []; latencies(remove) = [];
             nTrials = [nTrials; length(sequence)];
+            pLeftChoice(iFD) = sum(strcmp(sequence,'L')==1)./length(sequence);
             
             restrictiontype = find(strcmp(ExpKeys.RestrictionType,cfg.sessions));
             type = [type;restrictiontype*ones(sum(strcmp(sequence,'L')==1)+sum(strcmp(sequence,'R')==1),1)];
@@ -205,6 +211,9 @@ if proceed
         all.sessionChoice = [all.sessionChoice; sessionChoice];
         all.sessionLatency = [all.sessionLatency; sessionLatency];
         all.sessionType = [all.sessionType; sessionType];
+        
+        all.pLeftBehav = [all.pLeftBehav pLeftBehav];
+        all.pLeftChoice = [all.pLeftChoice pLeftChoice];
         
     end
     

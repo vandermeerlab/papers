@@ -119,12 +119,13 @@ keep = ~isnan(curr_preB) & ~isnan(behav_prevB);
 [r,p] = corrcoef(behav_prevB(keep),curr_preB(keep))
 plot(behav_prevB(keep),curr_preB(keep),'.');
 
-% previous content predicts behavior?
-keep = ~isnan(prev_post) & ~isnan(choice_t1)';
-[r,p] = corrcoef(prev_post(keep),choice_t1(keep))
+% current pre predicts current behavior?
+behav_bias = max(cat(1,behav,1-behav)); % invert normalized behavior below 0.5 to above 0.5
+keep = [2:6 10 11 13:24];
+behav_bias = behav_bias(keep);
 
-prev_postB = max(cat(1,prev_post',1-prev_post'));
-[r,p] = corrcoef(prev_postB(keep),choice_t1(keep))
+[r,p] = corrcoef(behav_bias,curr_preB(keep))
+plot(behav_bias,curr_preB(keep),'.');
 %% multiple regression/model comparison: is behavior or motiv state the best predictor?
 [r,p] = corrcoef(behav_prev(keep),curr_preB(keep))
 [r,p] = corrcoef(all_behav.sessionType(keep),curr_preB(keep))
