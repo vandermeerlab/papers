@@ -85,13 +85,16 @@ for iFD = 1:length(fd)
     clear trial_nseq_pre trial_nseq_post trial_pleft_pre trial_pleft_post
     clear trial_modal_pre trial_modal_post trial_last_pre trial_first_post
     clear trial_no trial_side trial_forced trial_type
-    clear trial_Spleft trial_Sleft_taken trial_Sleft_chosen trial_Sped_side trial_SratID trial_Sdep
+    clear trial_Spleft trial_Spleft_pre trial_Sleft_taken trial_Sleft_chosen trial_Sped_side trial_SratID trial_Sdep
 
     nTrials = length(metadata.taskvars.sequence);
     for iTrial = 1:nTrials
        
         % session-level sequence proportions
         trial_Spleft(iTrial) = sum(this_seq.usr.side == 1)./length(this_seq.tend);
+        
+        pre_seq = restrict(this_seq,ExpKeys.prerecord(1),ExpKeys.prerecord(2));
+        trial_Spleft_pre(iTrial) = sum(pre_seq.usr.side == 1)./length(pre_seq.tend);
         
         % get preceding and following sequences for this trial
         if iTrial == 1 % preceding segment is prerecord
@@ -237,40 +240,46 @@ end % of sessions loop
 
 %% ANALYSIS 1: predict behavior on free choice trials
 ALL_t.trial_SratID = categorical(ALL_t.trial_SratID); % rat ID (1-4)
-ALL_t.trial_side = categorical(ALL_t.trial_side); % behavioral choice (left/right, 1/2)
-ALL_t.trial_Sdep = categorical(ALL_t.trial_Sdep); % motivational state (food/water restricted, 1/2)
-ALL_t.trial_modal_pre = categorical(ALL_t.trial_modal_pre); % modal sequence content prior to trial (left/right arm, 1/2)
-ALL_t.trial_last_pre = categorical(ALL_t.trial_last_pre); % content of last sequence prior to trial (left/right arm, 1/2)
+%ALL_t.trial_side = categorical(ALL_t.trial_side); % behavioral choice (left/right, 1/2)
+%ALL_t.trial_Sdep = categorical(ALL_t.trial_Sdep); % motivational state (food/water restricted, 1/2)
+%ALL_t.trial_modal_pre = categorical(ALL_t.trial_modal_pre); % modal sequence content prior to trial (left/right arm, 1/2)
+%ALL_t.trial_last_pre = categorical(ALL_t.trial_last_pre); % content of last sequence prior to trial (left/right arm, 1/2)
 
 % trial selection
 %ALL_t.trial_side = double(ALL_t.trial_side)-1; % check if categorical vs. numeric response variable makes a difference (doesn't)
-rows = ALL_t.trial_type == 0 & ALL_t.trial_forced == 0; % exclude first and last trials for now
+%rows = ALL_t.trial_type == 0 & ALL_t.trial_forced == 0; % exclude first and last trials
+rows = ALL_t.trial_forced == 0;
 ALL_t2 = ALL_t(rows,:);
 
 % fit baseline model
-modelspec = 'trial_side ~ 1 + trial_Sdep'; % motivational state only
-%modelspec = 'trial_side ~ 1'; % sanity check, intercept only
-glm = fitglm(ALL_t2,modelspec,'Link','logit','Distribution','binomial')
-hist(glm.Residuals.Raw,100) % plot residuals -- note that model predictions aren't 0/1 for some reason
+modelspec = 'trial_side ~ trial_Sdep + (1|trial_SratID)'; % motivational state only
+glm = fitglme(ALL_t2,modelspec)
 
-out = glm.Fitted;
-out = categorical(out.Response > 0.5); data = categorical(double(ALL_t2.trial_side)-1 > 0.5);
+out = glm.fitted;
+out = categorical(out > 1.5); data = categorical(double(ALL_t2.trial_side) > 1.5);
 sum(out == data) % count number of correct predictions
 
 % test if replay content helps
-modelspec = 'trial_side ~ 1 + trial_Sdep + trial_Spleft'; % add session-wide replay content
-glm2 = fitglm(ALL_t2,modelspec,'Link','logit','Distribution','binomial')
-hist(glm2.Residuals.Raw,100)
+modelspec = 'trial_side ~ trial_Sdep + trial_Spleft + (1|trial_SratID)'; % add session-wide replay content
+glm2 = fitglme(ALL_t2,modelspec)
 
-out = glm2.Fitted;
-out = categorical(out.Response > 0.5); data = categorical(double(ALL_t2.trial_side)-1 > 0.5);
-sum(out == data) % note, same number of correct predictions
+out = glm2.fitted;
+out = categorical(out > 1.5); data = categorical(double(ALL_t2.trial_side) > 1.5);
+sum(out == data) % count number of correct predictions
 
 % report some model comparison info
-glm.ModelCriterion
-glm2.ModelCriterion
-p = 1-chi2cdf(glm.Deviance-glm2.Deviance,1) % note model 2 fits better
+compare(glm,glm2)
+
+% 'pre' content only
+modelspec = 'trial_side ~ trial_Sdep + trial_Spleft_pre + (1|trial_SratID)'; % add session-wide replay content
+glm3 = fitglme(ALL_t2,modelspec)
+
+out = glm2.fitted;
+out = categorical(out > 1.5); data = categorical(double(ALL_t2.trial_side) > 1.5);
+sum(out == data) % count number of correct predictions
+
+compare(glm,glm3)
 
 %% improve with trial by trial variables? no.
-modelspec = 'trial_side ~ 1 + trial_Sdep + trial_Spleft + trial_modal_pre'; % add session-wide replay content
-glm3 = fitglm(ALL_t2,modelspec,'Link','logit','Distribution','binomial')
+modelspec = 'trial_side ~ trial_Sdep + trial_Spleft + trial_modal_pre + (1|trial_SratID)'; % add session-wide replay content
+glm4 = fitglme(ALL_t2,modelspec)

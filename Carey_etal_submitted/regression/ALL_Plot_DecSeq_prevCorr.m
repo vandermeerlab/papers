@@ -133,6 +133,7 @@ plot(behav_bias,curr_preB(keep),'.');
 % construct table
 tbl = table(behav_prev(keep)',categorical(all_behav.sessionType(keep)),curr_pre(keep));
 tbl.Properties.VariableNames = {'behav','restr','content'};
+tbl = tbl([2:6 10 11 13:24],:); % restrict to included sessions only
 
 modelspec1 = 'content ~ 1 + behav';
 modelspec2 = 'content ~ 1 + restr';
@@ -149,6 +150,8 @@ tbl = table(behav_prev',behav',choice_prev',choice',categorical(rat_label)', ...
 tbl.Properties.VariableNames = {'behav_prev','behav','choice_prev','choice','ratID',...
     'restr','prev_post','prev_all','curr_pre','curr_all'};
 
+tbl = tbl([2:6 10 11 13:24],:); % restrict to included sessions only
+
 model1 = 'choice ~ 1 + restr';
 model2 = 'choice ~ 1 + restr + (1 | ratID)';
 
@@ -159,3 +162,11 @@ compare(glm1,glm2)
 model3 = 'choice ~ 1 + curr_all';
 glm3 = fitglme(tbl,model3); % adding replay content doesn't help
 compare(glm3,glm1)
+
+%% comparison of motivational state and previous behavior
+model1 = 'curr_pre ~ 1 + restr + (1 | ratID)';
+model2 = 'curr_pre ~ 1 + behav_prev + (1 | ratID)';
+
+glm1 = fitglme(tbl,model1);
+glm2 = fitglme(tbl,model2);
+compare(glm2,glm1)
