@@ -25,16 +25,16 @@ cfg_def.ylim = [1 2];
 cfg_def.ylimtick = [0.5 0.5];
 cfg_def.writeOutput = 0;
 cfg_def.output_fn = 'temp';
-cfg_def.epochs = {'all'}; % {'all'} or {'pre', 'task', 'post'};
+cfg_def.epochs = {'pre', 'task', 'post'}; % {'all'} or {'pre', 'task', 'post'};
 
 cfg = ProcessConfig(cfg_def, cfg_in);
 rng('default');
 
 %% load data somehow
-temp = load('C:\temp\S1_DecSeq_prerecord_all_eligibleCP_out'); data.pre = temp.data;
-temp = load('C:\temp\S1_DecSeq_taskrest_all_eligibleCP_out'); data.task = temp.data;
-temp = load('C:\temp\S1_DecSeq_postrecord_all_eligibleCP_out'); data.post = temp.data;
-temp = load('C:\temp\S1_DecSeq_all_all_eligibleCP_out'); data.all = temp.data;
+temp = load('C:\temp\S1_DecSeq_prerecord_all_eligible_out'); data.pre = temp.data;
+temp = load('C:\temp\S1_DecSeq_taskrest_all_eligible_out'); data.task = temp.data;
+temp = load('C:\temp\S1_DecSeq_postrecord_all_eligible_out'); data.post = temp.data;
+temp = load('C:\temp\S1_DecSeq_all_all_eligible_out'); data.all = temp.data;
 
 %% first arrange data and do shuffles
 cfg.rats = {'R042','R044','R050','R064'};
@@ -140,6 +140,7 @@ for iW = 1:length(what) % loop over epochs
     m2 = nanmean(this_data_all{2}); s2 = nanstd(this_data_all{2}) ./ sqrt(4); % SEM
     p = ranksum(this_data_all{1}, this_data_all{2});
     fprintf('%s: food %.2f +/ %.2f, water %.2f +/- %.2f, p = %.2e (ranksum)\n', what{iW}, m1, s1, m2, s2, p);
+    fprintf('%s: shuf SDs, food %.2f, water %.2f, diff %.2f\n', what{iW}, this_shuf_sd(1), this_shuf_sd(2), this_shuf_sd(3));
     
     % plot the shuffled data
     for iRec = 1:length(this_shuf_mean) % [x y w h] 

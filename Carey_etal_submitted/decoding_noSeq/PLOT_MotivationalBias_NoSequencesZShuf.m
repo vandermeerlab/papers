@@ -65,6 +65,7 @@ for iW = 1:length(what) % loop over epochs
     m2 = nanmean(this_data_all{2}); s2 = nanstd(this_data_all{2}) ./ sqrt(4); % SEM
     p = ranksum(this_data_all{1}, this_data_all{2});
     fprintf('%s: food %.2f +/ %.2f, water %.2f +/- %.2f, p = %.2e (ranksum)\n', what{iW}, m1, s1, m2, s2, p);
+    fprintf('%s: shuf SDs, food %.2f, water %.2f, diff %.2f\n', what{iW}, this_shuf_sd(1), this_shuf_sd(2), this_shuf_sd(3));
     
     % plot the shuffled data
     for iRec = 1:length(this_shuf_mean) % [x y w h] 
