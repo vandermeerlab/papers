@@ -1,7 +1,7 @@
 # Carey et al. (submitted)
 
 Code used for processing, analysis and visualization in Carey, Tanaka
-and van der Meer, "Reward revaluation biases hippocampal sequence
+and van der Meer, "Reward revaluation biases hippocampal replay
 content away from the preferred outcome" (submitted)
 
 Makes extensive use of the
@@ -27,24 +27,14 @@ from the lab server (email mvdm at dartmouth dot edu for credentials). Next, edi
 Then, to reproduce the results in the paper, run the following:
 
 - For analysis of **behavior** (Figure 1), run [Behavior_GenData.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/behavior/Behavior_GenData.m)
-  followed by [Behavior_MultiPlotData.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/behavior/Behavior_MultiPlotData.m) (for making the figure) and
-  [BehavChi.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/behavior/BehavChi.m) (for generating the stats).
-- For the main **sequenceless decoding log odds analysis** (Figures 2 and 3), first generate SWR candidate events using [MASTER_Generate_Tmaze_Candidates.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/MASTER_Generate_Tmaze_Candidates.m). For
-  the results in the main text, use the `amSWR` detector (default). This script saves a .mat file in each data folder containing the detected candidate events. To use a different SWR detector to, for instance, thresholding of the SWR envelope, change the settings as follows:
-
-```
-gen.SWRmethod = 'HT';
-gen.MUAmethod = 'none';
-gen.ThetaThreshold = [];
-```
-
-(remember to specify a different suffix, such as `suffix = '_HT1-3_noTheta';` to distinguish the resulting candidate files.)
+  followed by [PLOT_behaviorNewStyle.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/behavior/PLOT_behaviorNewStyle.m).
+- For the main **sequenceless decoding log odds analysis** (Figures 2 and 3), place the [SWR candidate event files](https://github.com/vandermeerlab/papers/tree/master/Carey_etal_submitted/SWRcandidates) in their corresponding data folders.
+  (or, use [MASTER_Generate_Tmaze_Candidates.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/MASTER_Generate_Tmaze_Candidates.m) to generate your own.)
 - Then, run [ALL_Generate_DecSeqCombined.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/decoding_noSeq/ALL_Generate_DecSeqCombined.m), which is a batch script to generate decoding data for each session.
-- Once that finishes, [PLOT_DecSeqCombined.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/decoding_noSeq/PLOT_DecSeqCombined.m) will output the statistics and figures.
-- For the main **decoded sequence analysis** (Figure 5) ensure you have previously generated SWR candidate events, as above.
-- Then, decode each session using [ALL_GenerateDecSeq.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/decoding/ALL_Generate_DecSeq.m).
-- Collect data across sessions with [ALL_Collect_DecSeq.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/decoding/ALL_Collect_DecSeq.m), and
-  generate the figures with [ALL_Plot_DecSeq.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/decoding/ALL_Plot_DecSeq.m). For these last two
+- Once that finishes, [PLOT_DecSeqCombinedShuf.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/decoding_noSeq/PLOT_DecSeqCombinedShuf.m) will output the statistics and figures.
+- [RESUME HERE] For the main **decoded sequence analysis** (Figure 5) decode each session using [ALL_GenerateDecSeq.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/decoding/ALL_Generate_DecSeq.m).
+- Collect data across sessions with [ALL_Collect_DecSeq_eligibleShuf.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/decoding_Seq/ALL_Collect_DecSeq_eligibleShuf.m), and
+  generate the figures with [ALL_Plot_DecSeq_eligible.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/decoding_Seq/ALL_Plot_DecSeq_eligible.m). For these last two
   steps, the default parameters generate the results in the main text. For the supplementary figures, modify the parameters accordingly.
 
 Other items:
@@ -63,7 +53,7 @@ We used MATLAB R2017a running on 64-bit Windows 7.
 Wiki-based tutorials introducing the codebase architecture, data and
 metadata formats, and step-by-step explanations of specific analyses,
 are
-[here](http://ctnsrv.uwaterloo.ca/vandermeerlab/doku.php?id=analysis:nsb2018). We
+[here](http://discovery.dartmouth.edu/~mvdm/wiki/doku.php?id=analysis:nsb2018). We
 also have a [Jupyter notebook](http://nbviewer.jupyter.org/github/summer-mind/mind_2017/blob/master/Tutorials/SpikeDecoding/spike_decoding_matlab.ipynb) with example analyses using this data set.
 
 The data set is the same as that described in van der Meer, Carey and
