@@ -9,7 +9,7 @@ function out = Generate_DecSeqShuf(cfg_in)
 %
 % cfg_def = [];
 % cfg_def.output_dir = 'files';
-% cfg_def.output_file_prefix = []; % when writing files, prefix this
+% cfg_def.output_file_prefix = 'S1_'; % when writing files, prefix this
 % cfg_def.dt = 0.025; % this is used for a firing rate threshold on Q matrix -- is that important?
 % cfg_def.TCsmooth = 1; % bins SD; vary this and the next
 % cfg_def.QsmoothSD = 0.002; % time SD; vary this with previous
@@ -32,14 +32,14 @@ function out = Generate_DecSeqShuf(cfg_in)
 % cfg_def.writeFiles = 1;
 % cfg_def.removeInterneurons = 0;
 % cfg_def.keepPosterior = 0;
-% cfg_def.nShuffles = 100; % if non-empty, perform identity shuffles 
+% cfg_def.nShuffles = 500; % if non-empty, perform identity shuffles 
 %
 % MvdM 2015
 
 %% master config
 cfg_def = [];
 cfg_def.output_dir = 'files';
-cfg_def.output_file_prefix = []; % when writing files, prefix this
+cfg_def.output_file_prefix = 'S1_'; % when writing files, prefix this
 cfg_def.dt = 0.025; % either vary this (keeping others constant), or
 cfg_def.TCsmooth = 1; % bins SD; vary this and the next
 cfg_def.QsmoothSD = 0.002; % time SD; vary this with previous
@@ -62,7 +62,7 @@ cfg_def.Qboxcar = 5;
 cfg_def.writeFiles = 1;
 cfg_def.removeInterneurons = 0;
 cfg_def.keepPosterior = 0;
-cfg_def.nShuffles = 100;
+cfg_def.nShuffles = 500;
 
 nMaxLaps = 20;
 cfg_def.encdecmat = ones(1,nMaxLaps);
