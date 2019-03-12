@@ -32,7 +32,7 @@ Then, to reproduce the results in the paper, run the following:
   (or, use [MASTER_Generate_Tmaze_Candidates.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/MASTER_Generate_Tmaze_Candidates.m) to generate your own.)
 - Then, run [ALL_Generate_DecSeqCombined.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/decoding_noSeq/ALL_Generate_DecSeqCombined.m), which is a batch script to generate decoding data for each session.
 - Once that finishes, [PLOT_DecSeqCombinedShuf.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/decoding_noSeq/PLOT_DecSeqCombinedShuf.m) will output the statistics and figures.
-- [RESUME HERE] For the main **decoded sequence analysis** (Figure 5) decode each session using [ALL_GenerateDecSeq.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/decoding/ALL_Generate_DecSeq.m).
+- For the main **decoded sequence analysis** (Figure 5) decode each session using [ALL_GenerateDecSeq.m](https://github.com/vandermeerlab/vandermeerlab/blob/master/code-matlab/tasks/Alyssa_Tmaze/decoding/ALL_Generate_DecSeq.m).
 - Collect data across sessions with [ALL_Collect_DecSeq_eligibleShuf.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/decoding_Seq/ALL_Collect_DecSeq_eligibleShuf.m), and
   generate the figures with [ALL_Plot_DecSeq_eligible.m](https://github.com/vandermeerlab/papers/blob/master/Carey_etal_submitted/decoding_Seq/ALL_Plot_DecSeq_eligible.m). For these last two
   steps, the default parameters generate the results in the main text. For the supplementary figures, modify the parameters accordingly.
