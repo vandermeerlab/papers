@@ -47,7 +47,7 @@ We used MATLAB R2014b running on 64-bit Windows 7.
 
 Wiki-based tutorials introducing the codebase architecture, and
 step-by-step explanations of specific analyses, are
-[here](http://ctnsrv.uwaterloo.ca/vandermeerlab/doku.php?id=analysis:course-w16). We
+[here](https://rcweb.dartmouth.edu/~mvdm/wiki). We
 also have a
 [Jupyter notebook](http://nbviewer.jupyter.org/github/summer-mind/mind_2017/blob/master/Tutorials/SpikeDecoding/spike_decoding_matlab.ipynb)
 with example analyses using this data set.

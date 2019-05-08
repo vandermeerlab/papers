@@ -36,5 +36,5 @@ release snapshot.
 
 Tutorial-style introductions to the data formats, data types, loaders,
 and analyses used here can be found on our
-[lab wiki](http://ctnsrv.uwaterloo.ca/vandermeerlab/doku.php?id=analysis:course-w16).
+[lab wiki](https://rcweb.dartmouth.edu/~mvdm/wiki).
 

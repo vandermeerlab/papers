@@ -48,4 +48,4 @@ We used MATLAB R2014b running on 64-bit Windows 7.
 
 Wiki-based tutorials introducing the codebase architecture, and
 step-by-step explanations of specific analyses, are
-[here](http://ctnsrv.uwaterloo.ca/vandermeerlab/doku.php?id=analysis:course-w16).
+[here](https://rcweb.dartmouth.edu/~mvdm/wiki).
