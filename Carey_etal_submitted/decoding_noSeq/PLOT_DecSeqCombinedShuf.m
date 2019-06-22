@@ -245,5 +245,6 @@ cfg_plot.fs = 12;
 cfg_plot.offs = 0.03;
 cfg_plot.rats = {'R042','R044','R050','R064'}; % which rats to plot
 cfg_plot.what = {'pre','task','post'}; % which epochs to plot
+cfg_plot.behav = 'experience';
 
 PLOT_SingleSessionBias_noSeq(cfg_plot,data)

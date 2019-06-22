@@ -7,13 +7,13 @@ load('C:\users\mvdm\Dropbox\projects\Alyssa\2018-04-25\noSeq_data'); % load outp
 %%
 cd('C:\users\mvdm\Documents\GitHub\papers\Carey_etal_submitted\decoding_noSeq');
 
-if 1
+if 1 % if data were generated on another machine...
    for iFD = 1:length(fd)
        fd{iFD}(1) = 'C';
    end
 end
 
-PLOT_DecSeqCombined;
+PLOT_DecSeqCombinedShuf;
 
 %% correlation between session n post and session n + 1 pre
 post_median_z = data.post.all.median_z;

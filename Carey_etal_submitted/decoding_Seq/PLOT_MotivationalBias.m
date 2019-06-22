@@ -49,6 +49,9 @@ for iW = 1:length(what)
             this_data = [data.(what{iW}).data.(rats{iRat}).food_left data.(what{iW}).data.(rats{iRat}).food_right ...
                 data.(what{iW}).data.(rats{iRat}).water_left data.(what{iW}).data.(rats{iRat}).water_right];
             session_data = IndivSessionData(data.(what{iW}).data.(rats{iRat}).ALL_sig_seq);
+            
+            fprintf('%s (all rats): %d sequences total\n', what{iW}, sum(this_data));
+    
         case 'props'
             this_data = [data.(what{iW}).data.(rats{iRat}).food_leftN data.(what{iW}).data.(rats{iRat}).food_rightN ...
                 data.(what{iW}).data.(rats{iRat}).water_leftN data.(what{iW}).data.(rats{iRat}).water_rightN];
@@ -57,6 +60,7 @@ for iW = 1:length(what)
             error('Unknown type %s',cfg.type);
     end
           
+
     % plot the data
     for iBar = 1:length(this_data)
         h(iBar) = bar(location(iBar),this_data(iBar),'FaceColor',col{iBar},'EdgeColor','none');
@@ -99,6 +103,8 @@ for iRat = 1:length(rats)
         case 'counts'
             this_data = [data.(what{iW}).data.(rats{iRat}).food_left data.(what{iW}).data.(rats{iRat}).food_right ...
                 data.(what{iW}).data.(rats{iRat}).water_left data.(what{iW}).data.(rats{iRat}).water_right];
+            
+            fprintf('%s (%s): %d sequences\n', what{iW}, rats{iRat}, sum(this_data));
         case 'props'
             this_data = [data.(what{iW}).data.(rats{iRat}).food_leftN data.(what{iW}).data.(rats{iRat}).food_rightN ...
                 data.(what{iW}).data.(rats{iRat}).water_leftN data.(what{iW}).data.(rats{iRat}).water_rightN];

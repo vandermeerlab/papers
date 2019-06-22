@@ -20,6 +20,7 @@ function fh = PLOT_SingleSessionBias(cfg_in,data)
 % data points (for all rats) and single data points (for indiv rats)
 
 cfg_def = [];
+cfg_def.behav = 'experience'; % {'choice', 'experience'}
 
 cfg = ProcessConfig(cfg_def,cfg_in);
 
@@ -69,9 +70,16 @@ end
 % normalized (N) input data is redundant for left and right, so remove
 sess_idx = sess_idx(1:2:end); rat_idx = rat_idx(1:2:end);
 seq = this_data.countN(1:2:end);
-behav = this_data.allTrialsN(1:2:end);
-choice = this_data.choiceN(1:2:end);
 type = this_data.type(1:2:end);
+
+switch cfg.behav
+    case 'experience'
+        behav = this_data.allTrialsN(1:2:end);
+        behav_label = 'experience p(food)';
+    case 'choice'
+        behav = this_data.choiceN(1:2:end);
+        behav_label = 'choice p(food)';
+end
 
 % get averages for each session, and plot each data point individually
 for iSess = 1:6
@@ -103,7 +111,7 @@ set(gca,'XTick',1:6,'LineWidth',1,'TickDir','out','FontSize',cfg.fs,'YTick',0:0.
 box off;
 
 yyaxis left;
-ylabel('choice p(food)');
+ylabel(behav_label);
 
 if cfg.writeOutput
     maximize; drawnow;
@@ -116,13 +124,13 @@ end
 
 % print some stats to go with this figure
 fprintf('likelihood ratio test for model comparison with and without motiv state:\n');
-tbl = table(categorical(rat_idx)',categorical(sess_idx)',behav,categorical(type),seq,choice,'VariableNames',{'Subject','Session','Behav','MotType','SeqContent','Choice'});
+tbl = table(categorical(rat_idx)',categorical(sess_idx)',categorical(type),seq,behav,'VariableNames',{'Subject','Session','MotType','SeqContent','Behav'});
 lme = fitglme(tbl,'SeqContent ~ MotType + (1|Subject)');
 lme2 = fitglme(tbl,'SeqContent ~ 1 + (1|Subject)');
 compare(lme2,lme)
 
-fprintf('Pearson correlation between choice and sequence content bias:\n');
-[r,p] = corrcoef(tbl.Choice,tbl.SeqContent)
+fprintf('Pearson correlation between behavior and sequence content bias:\n');
+[r,p] = corrcoef(tbl.Behav,tbl.SeqContent)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% BREAK OUT BY SUBJECT AND PHASE %%%
@@ -172,9 +180,18 @@ for iRat = 1:length(cfg.rats)
         plot([0.5 6.5],[0.5 0.5],'LineStyle','--','LineWidth',1,'Color',[1 1 1]);
         set(gca,'XTick',1:6,'LineWidth',1,'TickDir','out','FontSize',cfg.fs,'YTick',0:0.25:1,'YTickLabel',{'0','','0.5','','1'},'XLim',[0.5 6.5],'YLim',[0 1]);
         
-        plot(this_data.sess(1:2:end),this_data.allTrialsN(1:2:end),'k','LineStyle','-');
-        plot(this_data.sess(1:2:end),this_data.allTrialsN(1:2:end),'.k','MarkerSize',20);
-        
+        switch cfg.behav
+            case 'experience'
+                behav = this_data.allTrialsN(1:2:end);
+                
+            case 'choice'
+                behav = this_data.choiceN(1:2:end);
+                
+        end
+      
+        plot(this_data.sess(1:2:end),behav,'k','LineStyle','-');
+        plot(this_data.sess(1:2:end),behav,'.k','MarkerSize',20);
+           
         plot(this_data.sess(1:2:end),this_data.countN(1:2:end),'Color',[0 0.7 0],'LineStyle','-');
         hold on;
         plot(this_data.sess(1:2:end),this_data.countN(1:2:end),'.','MarkerSize',20,'Color',[0 0.7 0]);

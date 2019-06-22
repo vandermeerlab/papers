@@ -21,6 +21,7 @@ cfg_def = [];
 cfg_def.output_fn = 'temp';
 cfg_def.output_fd = pwd;
 cfg_def.writeOutput = 0;
+cfg_def.behav = 'experience'; % {'choice', 'experience'}
 
 cfg = ProcessConfig(cfg_def,cfg_in);
 
@@ -64,9 +65,16 @@ end
 
 % obtain data we want
 seq = this_data.median_z;
-behav = this_data.this_trials; % how to get this in collector?
-choice = this_data.this_choice;
 type = this_data.this_type;
+
+switch cfg.behav
+    case 'experience'
+        behav = this_data.this_trials;
+        behav_label = 'experience p(food)';
+    case 'choice'
+        behav = this_data.this_choice;
+        behav_label = 'choice p(food)';
+end
 
 % get averages for each session, and plot each data point individually
 for iSess = 1:6
@@ -112,15 +120,15 @@ end
 
 % print some stats to go with this figure
 fprintf('likelihood ratio test for model comparison with and without motiv state:\n');
-tbl = table(categorical(rat_idx)',categorical(sess_idx)',behav,categorical(type),seq,choice,'VariableNames',{'Subject','Session','Behav','MotType','SeqContent','Choice'});
+tbl = table(categorical(rat_idx)',categorical(sess_idx)',behav,categorical(type),seq,'VariableNames',{'Subject','Session','Behav','MotType','SeqContent'});
 %lme = fitglme(tbl,'SeqContent ~ 1 + MotType + Subject','Link','logit'); % subject-specific intercepts don't actually help!
 %lme2 = fitglme(tbl,'SeqContent ~ 1 + Subject','Link','logit');
 lme = fitglme(tbl,'SeqContent ~ 1 + MotType + (1|Subject)');
 lme2 = fitglme(tbl,'SeqContent ~ 1 + (1|Subject)');
 compare(lme2,lme)
 
-fprintf('Pearson correlation between choice and sequence content bias:\n');
-[r,p] = corrcoef(tbl.Choice,tbl.SeqContent)
+fprintf('Pearson correlation between behavior and sequence content bias:\n');
+[r,p] = corrcoef(tbl.Behav,tbl.SeqContent)
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%% BREAK OUT BY SUBJECT AND PHASE %%%
@@ -165,8 +173,17 @@ for iRat = 1:length(cfg.rats)
         plot([0.5 6.5],[0.5 0.5],'LineStyle','--','LineWidth',1,'Color',[1 1 1]);
         set(gca,'XTick',1:6,'LineWidth',1,'TickDir','out','FontSize',cfg.fs,'YTick',0:0.25:1,'YTickLabel',{'0','','0.5','','1'},'XLim',[0.5 6.5],'YLim',[0 1]);
         
-        plot(this_sess,this_data.this_trials,'k','LineStyle','-');
-        plot(this_sess,this_data.this_trials,'.k','MarkerSize',20);
+        switch cfg.behav
+            case 'experience'
+                behav = this_data.this_trials;
+                
+            case 'choice'
+                behav = this_data.this_choice;
+                
+        end
+        
+        plot(this_sess,behav,'k','LineStyle','-');
+        plot(this_sess,behav,'.k','MarkerSize',20);
         
         yyaxis right;
         plot(this_sess,this_data.median_z,'Color',[0 0.7 0],'LineStyle','-');

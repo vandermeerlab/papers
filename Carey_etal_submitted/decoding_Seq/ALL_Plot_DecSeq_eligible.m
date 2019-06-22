@@ -30,11 +30,12 @@ cfg.offs = 0.03;
 cfg.rats = {'R042','R044','R050','R064'}; % which rats to plot
 cfg.what = {'pre','task','post'}; % which epochs to plot
 cfg.output_fn = cat(2,cfg.outbasefn,'singleSession');
+cfg.behav = 'experience';
 
 PLOT_SingleSessionBias(cfg,data);
 
 %% raw sequence counts
-cfg.ylim = [450 250]; cfg.ylimtick = [150 125]; % limits for all rats and single rat insets, respectively
+cfg.ylim = [1500 800]; cfg.ylimtick = [500 400]; % limits for all rats and single rat insets, respectively
 cfg.fs = 18;
 cfg.type = 'counts';
 cfg.output_fn = cat(2,cfg.outbasefn,'_counts');
