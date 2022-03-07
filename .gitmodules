@@ -7,3 +7,6 @@
 [submodule "Gmaz&vanderMeer_2022/vStrBiconditionalOdorPaper"]
 	path = Gmaz&vanderMeer_2022/vStrBiconditionalOdorPaper
 	url = https://github.com/jgmaz/vStrBiconditionalOdorPaper/
+[submodule "Gmaz_vanderMeer_2022"]
+	path = Gmaz_vanderMeer_2022
+	url = https://github.com/jgmaz/vStrBiconditionalOdorPaper.git
