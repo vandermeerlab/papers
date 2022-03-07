@@ -4,3 +4,6 @@
 [submodule "Gmaz_etal_2018/vStrCueCodingPaper"]
 	path = Gmaz_etal_2018/vStrCueCodingPaper
 	url = https://github.com/jgmaz/vStrCueCodingPaper/
+[submodule "Gmaz&vanderMeer_2022/vStrBiconditionalOdorPaper"]
+	path = Gmaz&vanderMeer_2022/vStrBiconditionalOdorPaper
+	url = https://github.com/jgmaz/vStrBiconditionalOdorPaper/
